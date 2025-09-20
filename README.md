@@ -127,6 +127,57 @@ The following items should be installed in your system:
 
     Visit [http://localhost:8080](http://localhost:8080) in your browser.
 
+## Playwright User Acceptance Tests
+
+This project includes comprehensive Playwright user acceptance tests that verify the application works correctly from an end-user perspective.
+
+### Prerequisites
+
+- Java 17 or newer
+- Node.js (for Playwright browser installation)
+
+### Running Playwright Tests
+
+To run the Playwright user acceptance tests:
+
+```bash
+# Install Playwright browsers (first time only)
+npx playwright install chromium
+
+# Run Playwright tests
+./gradlew playwrightTest
+```
+
+### Test Structure
+
+The Playwright tests are organized into user-focused scenarios:
+
+- **Homepage Navigation Tests** - Verify main navigation and homepage functionality
+- **Owner Management Tests** - Test finding, creating, and editing pet owners
+- **Pet Management Tests** - Test adding and managing pets for owners
+- **Veterinarian Information Tests** - Verify veterinarian listing functionality
+
+Each test is written with clear "As a...", "I want...", "So that..." scenarios for maximum readability.
+
+### Test Features
+
+- **Readable scenarios**: Tests are written in Gherkin-like format for clarity
+- **Comprehensive coverage**: Tests cover major user flows and edge cases
+- **Stability**: Tests are designed to run reliably multiple times
+- **Screenshots**: Automatic screenshots are taken for debugging purposes
+- **Retry logic**: Tests include stability measures and timeouts
+
+### Troubleshooting Playwright Tests
+
+If Playwright tests fail to run:
+
+1. **Browser installation issues**: Run `npx playwright install chromium` to ensure browsers are installed
+2. **Port conflicts**: Ensure the application is not already running on port 8080
+3. **Timeout issues**: Check that your system has sufficient resources
+4. **Network issues**: Ensure internet connectivity for browser downloads
+
+For debugging, check the screenshots in `target/playwright-screenshots/` directory.
+
 ## Looking for something in particular?
 
 |Spring Boot Configuration | Class or Java property files  |
