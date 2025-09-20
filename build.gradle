@@ -52,12 +52,25 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
+  testImplementation 'com.microsoft.playwright:playwright:1.48.0'
   checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
   checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
 
 tasks.named('test') {
   useJUnitPlatform()
+  exclude '**/playwright/**'
+}
+
+// Playwright test task
+task playwrightTest(type: Test) {
+  useJUnitPlatform()
+  include '**/playwright/**'
+  systemProperty 'junit.jupiter.execution.parallel.enabled', 'false'
+  testLogging {
+    events "passed", "skipped", "failed"
+    exceptionFormat "full"
+  }
 }
 
 checkstyle {
