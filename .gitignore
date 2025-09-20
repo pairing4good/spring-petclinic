@@ -49,3 +49,12 @@ out/
 _site/
 *.css
 !petclinic.css
+
+### Node.js and Playwright ###
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+test-results/
+playwright-report/
+playwright/.cache/

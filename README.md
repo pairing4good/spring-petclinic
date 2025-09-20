@@ -153,6 +153,86 @@ Here is a list of them:
 | Bean Validation / Hibernate Validator: simplify Maven dependencies and backward compatibility |[HV-790](https://hibernate.atlassian.net/browse/HV-790) and [HV-792](https://hibernate.atlassian.net/browse/HV-792) |
 | Spring Data: provide more flexibility when working with JPQL queries | [DATAJPA-292](https://github.com/spring-projects/spring-data-jpa/issues/704) |
 
+## End-to-End Testing with Playwright
+
+This project includes comprehensive Playwright end-to-end tests that validate the main user journeys of the PetClinic application.
+
+### Installing Playwright Dependencies
+
+1. **Install Node.js dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Install Playwright browsers:**
+   ```bash
+   npx playwright install
+   ```
+
+3. **Install system dependencies (if needed):**
+   ```bash
+   npx playwright install-deps
+   ```
+
+### Running Playwright Tests
+
+1. **Start the application:**
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+
+2. **Run tests (in a separate terminal):**
+   ```bash
+   # Run all tests
+   npm test
+   
+   # Run tests with headed browser (visible)
+   npm run test:headed
+   
+   # Run tests in UI mode for debugging
+   npm run test:ui
+   
+   # Run tests in debug mode
+   npm run test:debug
+   
+   # Run tests three times to verify reliability
+   npm run test:three-times
+   ```
+
+3. **View test reports:**
+   ```bash
+   npm run test:report
+   ```
+
+### Test Structure
+
+The Playwright tests are organized following user acceptance criteria format:
+- **As a** [role]
+- **I want** [feature/action]  
+- **So that** [goal/reason]
+
+Tests cover the following user journeys:
+- Home page navigation and basic functionality
+- Finding and searching for pet owners
+- Viewing owner details and pet information
+- Adding new owners to the system
+- Adding new pets to existing owners
+- Recording veterinary visits for pets
+- Viewing veterinarians and their specialties
+- Navigating between paginated vet listings
+- Error handling and edge cases
+
+### Test Configuration
+
+The tests are configured in `playwright.config.js` and include:
+- Automatic application startup before tests
+- Screenshot capture on failures
+- Trace collection for debugging failed tests
+- HTML test reporting
+- Support for running tests in CI/CD environments
+
+The tests are designed to be reliable and can be executed multiple times without flakiness.
+
 ## Contributing
 
 The [issue tracker](https://github.com/spring-projects/spring-petclinic/issues) is the preferred channel for bug reports, feature requests and submitting pull requests.
