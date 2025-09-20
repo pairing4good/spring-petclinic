@@ -82,6 +82,32 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## User Acceptance Tests (UATs)
+
+The project includes a comprehensive suite of automated User Acceptance Tests that verify key user flows in story format. These tests are designed to be fast, reliable, and readable by non-technical stakeholders.
+
+### Running UATs
+
+```bash
+# Run all User Acceptance Tests
+./mvnw test -Dtest="*UAT"
+
+# Run specific UAT suite
+./mvnw test -Dtest=OwnerRegistrationUAT
+./mvnw test -Dtest=PetManagementUAT
+./mvnw test -Dtest=VeterinarianInformationUAT
+```
+
+### UAT Test Suites
+
+- **OwnerRegistrationUAT** - Tests for pet owner registration and search functionality
+- **PetManagementUAT** - Tests for pet registration, appointment booking, and visit history
+- **VeterinarianInformationUAT** - Tests for viewing veterinarian information
+
+All UATs follow the "As a..., I want..., so that..." format and use service/repository layer testing for maximum speed and reliability. Tests are completely self-contained with no external dependencies and pass reliably on repeated execution.
+
+For detailed documentation about the UAT implementation, see [UAT README](src/test/java/org/springframework/samples/petclinic/uat/README.md).
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.
