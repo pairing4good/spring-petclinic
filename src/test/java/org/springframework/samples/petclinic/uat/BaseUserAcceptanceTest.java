@@ -35,7 +35,6 @@ import org.springframework.web.client.RestTemplate;
  * - Transactional rollback for test isolation
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource(properties = { "spring.jpa.hibernate.ddl-auto=create-drop" })
 @Transactional
 public abstract class BaseUserAcceptanceTest {
 
