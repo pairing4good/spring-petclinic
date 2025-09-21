@@ -95,13 +95,8 @@ node {
   npmWorkDir = file("${project.projectDir}/.gradle/npm")
 }
 
-// NPM Tasks
-task npmInstall(type: NpmTask) {
-  description = 'Installs npm dependencies'
-  args = ['install']
-}
-
-task playwrightInstall(type: NpmTask) {
+// Custom NPM Tasks
+task playwrightInstallBrowsers(type: NpmTask) {
   description = 'Installs Playwright browsers'
   args = ['run', 'playwright:install']
   dependsOn npmInstall
@@ -110,21 +105,18 @@ task playwrightInstall(type: NpmTask) {
 task playwrightTest(type: NpmTask) {
   description = 'Runs Playwright E2E tests'
   args = ['run', 'test:e2e']
-  dependsOn playwrightInstall
+  dependsOn playwrightInstallBrowsers
 }
 
 task e2eTest(type: NpmTask) {
   description = 'Runs end-to-end tests'
   args = ['test']
-  dependsOn playwrightInstall
+  dependsOn playwrightInstallBrowsers
 }
-
-// Make test task depend on Playwright tests
-test.dependsOn playwrightTest
 
 // Skip Playwright tests if skipTests property is set
 tasks.whenTaskAdded { task ->
-  if (task.name == 'playwrightTest' || task.name == 'e2eTest') {
+  if (task.name == 'playwrightTest' || task.name == 'e2eTest' || task.name == 'playwrightInstallBrowsers') {
     task.onlyIf { !project.hasProperty('skipTests') && !project.hasProperty('skipE2ETests') }
   }
 }

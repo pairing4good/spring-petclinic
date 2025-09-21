@@ -322,6 +322,7 @@
             <phase>process-test-resources</phase>
             <configuration>
               <arguments>playwright install</arguments>
+              <skip>${skipTests}</skip>
             </configuration>
           </execution>
           <!-- Run Playwright tests -->
