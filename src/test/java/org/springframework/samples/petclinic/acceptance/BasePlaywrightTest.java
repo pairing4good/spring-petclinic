@@ -23,8 +23,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Base class for Playwright acceptance tests.
- * Provides common setup and teardown for browser automation.
+ * Base class for Playwright acceptance tests. Provides common setup and teardown for
+ * browser automation.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")

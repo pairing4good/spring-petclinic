@@ -22,8 +22,8 @@ import org.junit.jupiter.api.Test;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 /**
- * Comprehensive acceptance tests covering all major user flows in the PetClinic application.
- * These tests validate the complete user journey through the application.
+ * Comprehensive acceptance tests covering all major user flows in the PetClinic
+ * application. These tests validate the complete user journey through the application.
  */
 @DisplayName("PetClinic Comprehensive Acceptance Tests")
 public class PetClinicAcceptanceTest extends BasePlaywrightTest {
@@ -40,7 +40,7 @@ public class PetClinicAcceptanceTest extends BasePlaywrightTest {
 		// Then I should see the search form
 		assertThat(page).hasURL(baseUrl + "/owners/find");
 		assertThat(page.locator("h2")).containsText("Find Owners");
-		
+
 		// When I search for "Davis"
 		page.locator("#lastName").fill("Davis");
 		clickButton("Find Owner");
@@ -61,7 +61,9 @@ public class PetClinicAcceptanceTest extends BasePlaywrightTest {
 		clickButton("Find Owner");
 
 		// When I click on an owner's name
-		page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Betty Davis")).click();
+		page.locator("a")
+			.filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Betty Davis"))
+			.click();
 
 		// Then I should see their detailed information
 		assertThat(page).hasURL(baseUrl + "/owners/2");
@@ -88,7 +90,7 @@ public class PetClinicAcceptanceTest extends BasePlaywrightTest {
 		// Then I should see the new pet form
 		assertThat(page).hasURL(baseUrl + "/owners/2/pets/new");
 		assertThat(page.locator("h2")).containsText("New Pet");
-		
+
 		// When I fill in the pet details
 		page.locator("input[name='name']").fill("Fluffy");
 		page.locator("input[name='birthDate']").fill("2023-01-15");
@@ -108,11 +110,14 @@ public class PetClinicAcceptanceTest extends BasePlaywrightTest {
 		navigateTo("/owners/2");
 
 		// When I click Add Visit for a pet
-		page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Add Visit")).first().click();
+		page.locator("a")
+			.filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Add Visit"))
+			.first()
+			.click();
 
 		// Then I should see the visit form
 		assertThat(page.locator("h2")).containsText("New Visit");
-		
+
 		// When I fill in visit details
 		page.locator("input[name='date']").fill("2024-01-15");
 		page.locator("textarea[name='description']").fill("Routine checkup - pet is healthy");
@@ -137,7 +142,7 @@ public class PetClinicAcceptanceTest extends BasePlaywrightTest {
 		assertThat(page).hasURL(baseUrl + "/vets.html");
 		assertThat(page.locator("h2")).containsText("Veterinarians");
 		assertThat(page.locator("table")).isVisible();
-		
+
 		// And I should see vet information
 		assertThat(page.locator("table")).containsText("Name");
 		assertThat(page.locator("table")).containsText("Specialties");
@@ -159,7 +164,7 @@ public class PetClinicAcceptanceTest extends BasePlaywrightTest {
 		// Then I should see a user-friendly error page
 		assertThat(page).hasURL(baseUrl + "/oups");
 		assertThat(page.locator("h2")).containsText("Something happened...");
-		
+
 		// And I should still be able to navigate
 		assertThat(page.locator("nav")).isVisible();
 		clickLink("Home");
@@ -179,7 +184,7 @@ public class PetClinicAcceptanceTest extends BasePlaywrightTest {
 		// Then I should see the new owner form
 		assertThat(page).hasURL(baseUrl + "/owners/new");
 		assertThat(page.locator("h2")).containsText("Owner");
-		
+
 		// When I fill in owner details
 		page.locator("#firstName").fill("John");
 		page.locator("#lastName").fill("Doe");
@@ -205,19 +210,22 @@ public class PetClinicAcceptanceTest extends BasePlaywrightTest {
 		// When I navigate through different sections
 		clickLink("Find Owners");
 		assertThat(page.locator("h2")).containsText("Find Owners");
-		
+
 		clickLink("Veterinarians");
 		assertThat(page.locator("h2")).containsText("Veterinarians");
-		
+
 		clickLink("Home");
 		assertThat(page.locator("h2")).containsText("Welcome");
-		
+
 		// Then all navigation should work consistently
 		// And the navigation menu should always be present
 		assertThat(page.locator("nav")).isVisible();
-		assertThat(page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Home"))).isVisible();
-		assertThat(page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Find Owners"))).isVisible();
-		assertThat(page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Veterinarians"))).isVisible();
+		assertThat(page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Home")))
+			.isVisible();
+		assertThat(page.locator("a")
+			.filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Find Owners"))).isVisible();
+		assertThat(page.locator("a")
+			.filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Veterinarians"))).isVisible();
 	}
 
 }

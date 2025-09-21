@@ -22,8 +22,8 @@ import org.junit.jupiter.api.Test;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 /**
- * Acceptance tests for the home page and general navigation.
- * These tests validate the main application entry point and navigation structure.
+ * Acceptance tests for the home page and general navigation. These tests validate the
+ * main application entry point and navigation structure.
  */
 @DisplayName("Home Page and Navigation Acceptance Tests")
 public class HomePageAcceptanceTest extends BasePlaywrightTest {
@@ -49,10 +49,14 @@ public class HomePageAcceptanceTest extends BasePlaywrightTest {
 		// When I look at the navigation
 		// Then I should see all main navigation links
 		assertThat(page.locator("nav")).isVisible();
-		assertThat(page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Home"))).isVisible();
-		assertThat(page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Find Owners"))).isVisible();
-		assertThat(page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Veterinarians"))).isVisible();
-		assertThat(page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Error"))).isVisible();
+		assertThat(page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Home")))
+			.isVisible();
+		assertThat(page.locator("a")
+			.filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Find Owners"))).isVisible();
+		assertThat(page.locator("a")
+			.filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Veterinarians"))).isVisible();
+		assertThat(page.locator("a").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Error")))
+			.isVisible();
 	}
 
 	@Test

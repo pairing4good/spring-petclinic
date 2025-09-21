@@ -27,3 +27,7 @@ jobs:
           cache: maven
       - name: Build with Maven Wrapper
         run: ./mvnw -B verify
+      - name: Run Playwright Acceptance Tests
+        run: ./mvnw test -Dtest="*AcceptanceTest" --batch-mode
+        env:
+          CI: true
