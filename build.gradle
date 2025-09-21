@@ -7,6 +7,7 @@ plugins {
   id 'org.cyclonedx.bom' version '2.3.1'
   id 'io.spring.javaformat' version '0.0.46'
   id "io.spring.nohttp" version "0.0.11"
+  id 'com.github.node-gradle.node' version '7.1.0'
 }
 
 gradle.startParameter.excludedTaskNames += [ "checkFormatAot", "checkFormatAotTest" ]
@@ -84,6 +85,49 @@ checkFormatAotTest.enabled = false
 
 formatAot.enabled = false
 formatAotTest.enabled = false
+
+// Node.js configuration for E2E testing
+node {
+  version = '20.19.5'
+  npmVersion = '10.8.2'
+  download = true
+  workDir = file("${project.projectDir}/.gradle/nodejs")
+  npmWorkDir = file("${project.projectDir}/.gradle/npm")
+}
+
+// NPM Tasks
+task npmInstall(type: NpmTask) {
+  description = 'Installs npm dependencies'
+  args = ['install']
+}
+
+task playwrightInstall(type: NpmTask) {
+  description = 'Installs Playwright browsers'
+  args = ['run', 'playwright:install']
+  dependsOn npmInstall
+}
+
+task playwrightTest(type: NpmTask) {
+  description = 'Runs Playwright E2E tests'
+  args = ['run', 'test:e2e']
+  dependsOn playwrightInstall
+}
+
+task e2eTest(type: NpmTask) {
+  description = 'Runs end-to-end tests'
+  args = ['test']
+  dependsOn playwrightInstall
+}
+
+// Make test task depend on Playwright tests
+test.dependsOn playwrightTest
+
+// Skip Playwright tests if skipTests property is set
+tasks.whenTaskAdded { task ->
+  if (task.name == 'playwrightTest' || task.name == 'e2eTest') {
+    task.onlyIf { !project.hasProperty('skipTests') && !project.hasProperty('skipE2ETests') }
+  }
+}
 
 wrapper {
   gradleVersion = "8.14.3"

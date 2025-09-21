@@ -49,3 +49,14 @@ out/
 _site/
 *.css
 !petclinic.css
+
+### Node.js and E2E Tests ###
+node_modules/
+package-lock.json
+playwright-report/
+test-results/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

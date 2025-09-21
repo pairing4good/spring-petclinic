@@ -8,7 +8,8 @@
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:report": "playwright show-report",
-    "playwright": "playwright test"
+    "playwright": "playwright test",
+    "playwright:install": "npx playwright install"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.0"

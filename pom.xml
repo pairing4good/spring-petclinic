@@ -36,6 +36,11 @@
     <maven-checkstyle.version>3.6.0</maven-checkstyle.version>
     <nohttp-checkstyle.version>0.0.11</nohttp-checkstyle.version>
     <spring-format.version>0.0.46</spring-format.version>
+    
+    <!-- Frontend and E2E Testing -->
+    <frontend-maven-plugin.version>1.15.1</frontend-maven-plugin.version>
+    <node.version>v20.19.5</node.version>
+    <npm.version>10.8.2</npm.version>
 
   </properties>
 
@@ -277,6 +282,61 @@
         <?m2e ignore?>
         <groupId>org.cyclonedx</groupId>
         <artifactId>cyclonedx-maven-plugin</artifactId>
+      </plugin>
+
+      <!-- Frontend Maven Plugin for E2E Testing -->
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>${frontend-maven-plugin.version}</version>
+        <configuration>
+          <nodeVersion>${node.version}</nodeVersion>
+          <npmVersion>${npm.version}</npmVersion>
+        </configuration>
+        <executions>
+          <!-- Install Node and NPM -->
+          <execution>
+            <id>install node and npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <phase>generate-resources</phase>
+          </execution>
+          <!-- Install NPM dependencies -->
+          <execution>
+            <id>npm install</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <arguments>install</arguments>
+            </configuration>
+          </execution>
+          <!-- Install Playwright browsers -->
+          <execution>
+            <id>playwright install</id>
+            <goals>
+              <goal>npx</goal>
+            </goals>
+            <phase>process-test-resources</phase>
+            <configuration>
+              <arguments>playwright install</arguments>
+            </configuration>
+          </execution>
+          <!-- Run Playwright tests -->
+          <execution>
+            <id>playwright test</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>test</phase>
+            <configuration>
+              <arguments>run test:e2e</arguments>
+              <skip>${skipTests}</skip>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
 
     </plugins>

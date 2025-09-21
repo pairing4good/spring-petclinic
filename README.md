@@ -82,6 +82,209 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## End-to-End Testing with Playwright
+
+This project includes comprehensive end-to-end tests using [Playwright](https://playwright.dev/) that cover all user flows, error scenarios, and edge cases.
+
+### Prerequisites for E2E Testing
+
+- Node.js 18 or newer
+- npm or yarn package manager
+- All browsers will be installed automatically by Playwright
+
+### Running E2E Tests
+
+#### With Maven
+
+```bash
+# Run all tests including E2E tests
+./mvnw verify
+
+# Run only E2E tests
+./mvnw frontend:npm@"playwright test" -DskipTests
+
+# Skip E2E tests during build
+./mvnw verify -DskipTests
+```
+
+#### With Gradle
+
+```bash
+# Run all tests including E2E tests
+./gradlew test
+
+# Run only E2E tests
+./gradlew playwrightTest
+
+# Run E2E tests with alternative task
+./gradlew e2eTest
+
+# Skip E2E tests during build
+./gradlew build -PskipE2ETests
+```
+
+#### With npm directly
+
+```bash
+# Install dependencies
+npm install
+
+# Install Playwright browsers
+npx playwright install
+
+# Run all E2E tests
+npm test
+# or
+npm run test:e2e
+
+# Run tests in headed mode (with browser UI)
+npm run test:headed
+
+# Run tests in debug mode
+npm run test:debug
+
+# View test report
+npm run test:report
+```
+
+### E2E Test Coverage
+
+The Playwright test suite covers:
+
+- **Navigation and Welcome Page**: Home page, menu navigation, responsive design
+- **Owner Management**: Create, find, edit, view owner details, form validation
+- **Pet Management**: Add pets, edit pet details, pet type selection, validation
+- **Visit Management**: Schedule visits, view history, form validation
+- **Veterinarian Features**: View vet list, pagination, specialties
+- **Error Handling**: 404 pages, form validation errors, server errors
+- **Responsive Design**: Mobile, tablet, and desktop viewports
+- **Accessibility**: Keyboard navigation, ARIA labels, screen reader compatibility
+- **Cross-browser**: Chrome, Firefox, and mobile browsers
+
+### Test Structure
+
+```
+e2e-tests/
+├── pages/              # Page Object Model classes
+│   ├── BasePage.ts     # Common page functionality
+│   ├── WelcomePage.ts  # Home page interactions
+│   ├── OwnerPage.ts    # Owner management
+│   ├── PetPage.ts      # Pet management
+│   ├── VisitPage.ts    # Visit scheduling
+│   └── VetPage.ts      # Veterinarian listings
+├── welcome.spec.ts     # Welcome page and navigation tests
+├── owner.spec.ts       # Owner CRUD operations tests
+├── pet.spec.ts         # Pet management tests
+├── visit.spec.ts       # Visit scheduling tests
+├── vet.spec.ts         # Veterinarian viewing tests
+├── error-handling.spec.ts    # Error scenarios and edge cases
+├── accessibility.spec.ts     # Accessibility compliance tests
+└── responsive.spec.ts        # Responsive design tests
+```
+
+### Browser Configuration
+
+Tests run on multiple browsers by default:
+- **Chromium** (Chrome-based browsers)
+- **Firefox**
+- **Mobile Chrome** (mobile viewport simulation)
+
+### CI/CD Integration
+
+E2E tests are automatically run in GitHub Actions for both Maven and Gradle builds. Test reports and videos are uploaded as artifacts when tests fail.
+
+### Troubleshooting E2E Tests
+
+#### Common Issues
+
+1. **Browser Installation Fails**
+   ```bash
+   # Install with system dependencies
+   npx playwright install --with-deps
+   
+   # Or install specific browser
+   npx playwright install chromium
+   ```
+
+2. **Tests Fail in Headless Mode**
+   ```bash
+   # Run in headed mode to see what's happening
+   npm run test:headed
+   
+   # Run with debug mode
+   npm run test:debug
+   ```
+
+3. **Application Not Starting**
+   - Ensure Spring Boot application is running on port 8080
+   - Check that no other process is using port 8080
+   - Verify database connectivity
+
+4. **Flaky Tests**
+   - Tests include proper wait strategies and retry mechanisms
+   - Check network connectivity and system performance
+   - Review test logs and screenshots in `test-results/` directory
+
+5. **Permission Issues**
+   ```bash
+   # On Linux/Mac, ensure execute permissions
+   chmod +x ./mvnw ./gradlew
+   
+   # Install browsers with system packages
+   sudo npx playwright install-deps
+   ```
+
+#### Debug Mode
+
+Run tests in debug mode to step through them interactively:
+
+```bash
+npm run test:debug
+```
+
+This opens the Playwright Inspector where you can:
+- Step through tests line by line
+- Inspect page elements
+- View console logs and network activity
+- Generate and test selectors
+
+#### Test Reports
+
+After running tests, view the HTML report:
+
+```bash
+npm run test:report
+```
+
+This provides:
+- Detailed test results with screenshots
+- Error traces and logs
+- Performance metrics
+- Video recordings of failed tests
+
+### Accessibility Testing
+
+The test suite includes comprehensive accessibility checks:
+- Keyboard navigation support
+- ARIA label validation
+- Color contrast verification
+- Screen reader compatibility
+- Focus management
+
+Run accessibility tests specifically:
+```bash
+npx playwright test accessibility.spec.ts
+```
+
+### Performance Testing
+
+E2E tests include basic performance validations:
+- Page load times
+- Navigation responsiveness  
+- Form submission speed
+
+For detailed performance analysis, use browser developer tools during headed test runs.
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.
