@@ -72,7 +72,6 @@ public abstract class BaseE2ETest {
 			browser = null;
 		}
 	}
-	}
 
 	@AfterAll
 	static void closeBrowser() {
@@ -91,7 +90,7 @@ public abstract class BaseE2ETest {
 			org.junit.jupiter.api.Assumptions.assumeTrue(false, "Playwright browser not available, skipping E2E test");
 			return;
 		}
-		
+
 		// Create new context for test isolation
 		context = browser.newContext(new Browser.NewContextOptions().setViewportSize(1280, 720).setLocale("en-US"));
 
