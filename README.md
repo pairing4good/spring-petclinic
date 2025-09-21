@@ -105,38 +105,38 @@ This project includes comprehensive end-to-end tests using [Playwright for Java]
 
 **Run all tests (includes E2E tests):**
 ```bash
-# Maven (E2E tests skipped by default)
+# Maven
 ./mvnw test
 
-# Gradle (E2E tests skipped by default)  
+# Gradle  
 ./gradlew test
 ```
 
 **Run only E2E tests:**
 ```bash
 # Maven
-ENABLE_E2E_TESTS=true ./mvnw test -Pe2e
+./mvnw test -Pe2e
 
 # Gradle
-ENABLE_E2E_TESTS=true ./gradlew e2eTest
+./gradlew e2eTest
 ```
 
 **Run specific E2E test class:**
 ```bash
 # Maven
-ENABLE_E2E_TESTS=true ./mvnw test -Dtest=NavigationE2ETest
+./mvnw test -Dtest=NavigationE2ETest
 
 # Gradle  
-ENABLE_E2E_TESTS=true ./gradlew e2eTest --tests NavigationE2ETest
+./gradlew e2eTest --tests NavigationE2ETest
 ```
 
 **Run specific E2E test method:**
 ```bash
 # Maven
-ENABLE_E2E_TESTS=true ./mvnw test -Dtest=NavigationE2ETest#asAUser_IWantToVisitTheHomePage_SoThatICanAccessThePetClinicApplication
+./mvnw test -Dtest=NavigationE2ETest#asAUser_IWantToVisitTheHomePage_SoThatICanAccessThePetClinicApplication
 
 # Gradle
-ENABLE_E2E_TESTS=true ./gradlew e2eTest --tests NavigationE2ETest.asAUser_IWantToVisitTheHomePage_SoThatICanAccessThePetClinicApplication
+./gradlew e2eTest --tests NavigationE2ETest.asAUser_IWantToVisitTheHomePage_SoThatICanAccessThePetClinicApplication
 ```
 
 #### Test Coverage
@@ -153,21 +153,18 @@ The E2E test suite covers:
 #### Test Configuration
 
 E2E tests are configured to:
-- **Skip by default** to avoid browser dependency issues in CI environments
-- Run in headless mode when enabled  
+- Run in headless mode by default
 - Test Chrome, Firefox, and Safari (when available)
 - Include retry logic for CI environments
 - Support multiple viewport sizes for responsive testing
 - Include accessibility and keyboard navigation checks
+- Automatically skip if browsers cannot be installed or initialized
 
-**To enable E2E tests**, set the environment variable:
+**Browser Installation:**
+Playwright browsers are automatically installed in CI environments. For local development:
 ```bash
-export ENABLE_E2E_TESTS=true
-```
-
-Or run with the variable inline:
-```bash
-ENABLE_E2E_TESTS=true ./mvnw test -Pe2e
+# Install browsers manually if needed
+./mvnw exec:java -Dexec.mainClass="com.microsoft.playwright.CLI" -Dexec.args="install"
 ```
 
 #### Troubleshooting

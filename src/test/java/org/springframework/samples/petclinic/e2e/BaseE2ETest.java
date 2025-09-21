@@ -51,17 +51,6 @@ public abstract class BaseE2ETest {
 
 	@BeforeAll
 	static void launchBrowser() {
-		// Only run E2E tests if explicitly enabled via environment variable
-		String enableE2E = System.getenv("ENABLE_E2E_TESTS");
-		boolean forceSkip = !"true".equals(enableE2E) && !"1".equals(enableE2E);
-
-		if (forceSkip) {
-			System.err.println("E2E tests are disabled by default. Set ENABLE_E2E_TESTS=true to enable them.");
-			System.err.println("Skipping E2E tests due to browser availability concerns in CI environments.");
-			browser = null;
-			return;
-		}
-
 		try {
 			playwright = Playwright.create();
 
