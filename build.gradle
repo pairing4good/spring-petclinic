@@ -58,7 +58,9 @@ dependencies {
 }
 
 tasks.named('test') {
-  useJUnitPlatform()
+  useJUnitPlatform {
+    excludeTags 'playwright'
+  }
 }
 
 // Playwright tasks

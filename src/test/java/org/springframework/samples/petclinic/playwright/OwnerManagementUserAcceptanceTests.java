@@ -24,9 +24,9 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 /**
  * User acceptance tests for owner management functionality.
- * 
- * These tests verify that users can search for, view, create, and update pet owners
- * in the PetClinic application.
+ *
+ * These tests verify that users can search for, view, create, and update pet owners in
+ * the PetClinic application.
  */
 class OwnerManagementUserAcceptanceTests extends PlaywrightTestBase {
 
@@ -67,7 +67,7 @@ class OwnerManagementUserAcceptanceTests extends PlaywrightTestBase {
 		// Then: They should see a list of all owners
 		assertThat(page.locator("h2")).containsText("Owners");
 		assertThat(page.locator("table")).isVisible();
-		
+
 		// Should see the "Add Owner" button
 		assertThat(page.locator("a[href='/owners/new']")).isVisible();
 	}
@@ -140,13 +140,13 @@ class OwnerManagementUserAcceptanceTests extends PlaywrightTestBase {
 
 			// Then: They should see the owner's details page
 			assertThat(page.locator("h2")).containsText("Owner Information");
-			
+
 			// Should see owner details table
 			assertThat(page.locator("table.table-striped")).isVisible();
-			
+
 			// Should see "Edit Owner" button
 			assertThat(page.locator("a[href*='/edit']")).isVisible();
-			
+
 			// Should see "Add New Pet" button
 			assertThat(page.locator("a[href*='/pets/new']")).isVisible();
 		}

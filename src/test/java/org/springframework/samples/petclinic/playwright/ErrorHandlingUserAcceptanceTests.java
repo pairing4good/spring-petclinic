@@ -24,9 +24,9 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 /**
  * User acceptance tests for error handling and edge cases.
- * 
- * These tests verify that the application handles errors gracefully and provides
- * helpful feedback to users when something goes wrong.
+ *
+ * These tests verify that the application handles errors gracefully and provides helpful
+ * feedback to users when something goes wrong.
  */
 class ErrorHandlingUserAcceptanceTests extends PlaywrightTestBase {
 
@@ -45,10 +45,10 @@ class ErrorHandlingUserAcceptanceTests extends PlaywrightTestBase {
 
 		// Then: They should see a user-friendly error page
 		assertThat(page.locator("h2")).containsText("Something happened...");
-		
+
 		// Should provide some explanation or guidance
 		assertThat(page.locator("body")).isVisible();
-		
+
 		// Should maintain the application layout/navigation
 		assertThat(page.locator("nav")).isVisible();
 	}
@@ -81,7 +81,7 @@ class ErrorHandlingUserAcceptanceTests extends PlaywrightTestBase {
 		// This could be a 404 page or redirect to home - either is acceptable
 		// The key is that the page loads and doesn't crash
 		assertThat(page.locator("body")).isVisible();
-		
+
 		// Navigation should still be available
 		assertThat(page.locator("nav")).isVisible();
 	}
@@ -148,12 +148,13 @@ class ErrorHandlingUserAcceptanceTests extends PlaywrightTestBase {
 		// Then: The application should handle empty results gracefully
 		// Either showing "no results found" or an empty list
 		assertThat(page.locator("body")).isVisible();
-		
+
 		// Should still show the search interface or results structure
 		if (page.locator("h2").textContent().contains("Owners")) {
 			// Empty results page is acceptable
 			assertThat(page.locator("h2")).containsText("Owners");
-		} else {
+		}
+		else {
 			// Returning to search form is also acceptable
 			assertThat(page.locator("h2")).containsText("Find Owners");
 		}

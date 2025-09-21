@@ -24,9 +24,9 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 /**
  * User acceptance tests for pet management functionality.
- * 
- * These tests verify that users can add pets to owners, view pet information,
- * and manage pet details in the PetClinic application.
+ *
+ * These tests verify that users can add pets to owners, view pet information, and manage
+ * pet details in the PetClinic application.
  */
 class PetManagementUserAcceptanceTests extends PlaywrightTestBase {
 
@@ -55,7 +55,7 @@ class PetManagementUserAcceptanceTests extends PlaywrightTestBase {
 	void shouldAddNewPetToOwner() {
 		// Given: A user is viewing an owner's details page
 		if (page.locator("h2").textContent().contains("Owner Information")) {
-			
+
 			// When: They click "Add New Pet"
 			page.click("a[href*='/pets/new']");
 			page.waitForLoadState();
@@ -104,12 +104,12 @@ class PetManagementUserAcceptanceTests extends PlaywrightTestBase {
 	void shouldEditPetInformation() {
 		// Given: An owner has pets and wants to edit one
 		if (page.locator("h2").textContent().contains("Owner Information")) {
-			
+
 			// Check if there are any pets listed
 			if (page.locator("dt:has-text('Pets and Visits')").count() > 0) {
 				// Look for edit pet link
 				if (page.locator("a[href*='/pets/'][href*='/edit']").count() > 0) {
-					
+
 					// When: They click "Edit Pet"
 					page.locator("a[href*='/pets/'][href*='/edit']").first().click();
 					page.waitForLoadState();
@@ -142,7 +142,7 @@ class PetManagementUserAcceptanceTests extends PlaywrightTestBase {
 			// When: They look at the pet type dropdown
 			// Then: They should see various pet type options
 			assertThat(page.locator("select[name='type']")).isVisible();
-			
+
 			// Check that there are multiple options (common pet types)
 			if (page.locator("select[name='type'] option").count() > 1) {
 				// Multiple pet types are available
@@ -156,13 +156,13 @@ class PetManagementUserAcceptanceTests extends PlaywrightTestBase {
 	void shouldDisplayPetInformationClearly() {
 		// Given: A user is viewing an owner's details page with pets
 		if (page.locator("h2").textContent().contains("Owner Information")) {
-			
+
 			// When: They look at the pets section
 			// Then: Pet information should be clearly displayed
 			if (page.locator("dt:has-text('Pets and Visits')").count() > 0) {
 				// Pet section should be visible
 				assertThat(page.locator("dt:has-text('Pets and Visits')")).isVisible();
-				
+
 				// If there are pets, their details should be visible
 				if (page.locator("table").count() > 1) {
 					// Should show pet names, birth dates, types

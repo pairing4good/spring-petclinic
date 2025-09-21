@@ -24,9 +24,9 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 /**
  * User acceptance tests for visit management functionality.
- * 
- * These tests verify that users can schedule visits for pets, view visit history,
- * and manage visit information in the PetClinic application.
+ *
+ * These tests verify that users can schedule visits for pets, view visit history, and
+ * manage visit information in the PetClinic application.
  */
 class VisitManagementUserAcceptanceTests extends PlaywrightTestBase {
 
@@ -55,10 +55,10 @@ class VisitManagementUserAcceptanceTests extends PlaywrightTestBase {
 	void shouldScheduleNewVisitForPet() {
 		// Given: A user is viewing an owner's details page with pets
 		if (page.locator("h2").textContent().contains("Owner Information")) {
-			
+
 			// Look for "Add Visit" link for any pet
 			if (page.locator("a[href*='/visits/new']").count() > 0) {
-				
+
 				// When: They click "Add Visit" for a pet
 				page.locator("a[href*='/visits/new']").first().click();
 				page.waitForLoadState();
@@ -88,7 +88,7 @@ class VisitManagementUserAcceptanceTests extends PlaywrightTestBase {
 	void shouldShowValidationErrorsForInvalidVisitData() {
 		// Given: A user is scheduling a new visit
 		if (page.locator("h2").textContent().contains("Owner Information")) {
-			
+
 			if (page.locator("a[href*='/visits/new']").count() > 0) {
 				page.locator("a[href*='/visits/new']").first().click();
 				page.waitForLoadState();
@@ -109,16 +109,16 @@ class VisitManagementUserAcceptanceTests extends PlaywrightTestBase {
 	void shouldDisplayVisitHistoryForPet() {
 		// Given: A user is viewing an owner's details page
 		if (page.locator("h2").textContent().contains("Owner Information")) {
-			
+
 			// When: They look at the pets and visits section
 			// Then: Visit history should be clearly displayed
 			if (page.locator("dt:has-text('Pets and Visits')").count() > 0) {
 				assertThat(page.locator("dt:has-text('Pets and Visits')")).isVisible();
-				
+
 				// If there are visits, they should be shown in a table format
 				if (page.locator("table").count() > 0) {
 					assertThat(page.locator("table")).isVisible();
-					
+
 					// Visit dates and descriptions should be visible if any exist
 					// This varies based on test data, so we just verify structure exists
 				}
@@ -131,12 +131,12 @@ class VisitManagementUserAcceptanceTests extends PlaywrightTestBase {
 	void shouldDisplayPetNameWithVisits() {
 		// Given: A user is viewing an owner's details page with multiple pets
 		if (page.locator("h2").textContent().contains("Owner Information")) {
-			
+
 			// When: They look at the pets and visits section
 			// Then: Each pet's name should be clearly displayed with their visits
 			if (page.locator("dt:has-text('Pets and Visits')").count() > 0) {
 				assertThat(page.locator("dt:has-text('Pets and Visits')")).isVisible();
-				
+
 				// Pet names should be visible as section headers or in tables
 				// The structure ensures pets are grouped with their visits
 			}
@@ -148,11 +148,11 @@ class VisitManagementUserAcceptanceTests extends PlaywrightTestBase {
 	void shouldProvideEasyAccessToAddVisit() {
 		// Given: A user is viewing an owner's details page with pets
 		if (page.locator("h2").textContent().contains("Owner Information")) {
-			
+
 			// When: They look for ways to add visits
 			// Then: "Add Visit" links should be easily accessible for each pet
 			if (page.locator("dt:has-text('Pets and Visits')").count() > 0) {
-				
+
 				// Should have clear "Add Visit" links for pets
 				// The exact count depends on test data, but structure should support it
 				if (page.locator("a[href*='/visits/new']").count() > 0) {
@@ -167,7 +167,7 @@ class VisitManagementUserAcceptanceTests extends PlaywrightTestBase {
 	void shouldDisplayVisitDatesInClearFormat() {
 		// Given: A user is viewing an owner's details page with visit history
 		if (page.locator("h2").textContent().contains("Owner Information")) {
-			
+
 			// When: They look at existing visits
 			// Then: Visit dates should be displayed in a readable format
 			if (page.locator("dt:has-text('Pets and Visits')").count() > 0) {

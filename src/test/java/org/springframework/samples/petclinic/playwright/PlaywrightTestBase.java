@@ -23,8 +23,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Base class for Playwright user acceptance tests.
- * Provides common setup and configuration for browser-based testing.
+ * Base class for Playwright user acceptance tests. Provides common setup and
+ * configuration for browser-based testing.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -35,8 +35,11 @@ public abstract class PlaywrightTestBase {
 	protected int port;
 
 	protected static Playwright playwright;
+
 	protected static Browser browser;
+
 	protected BrowserContext context;
+
 	protected Page page;
 
 	protected String baseUrl;
@@ -44,9 +47,10 @@ public abstract class PlaywrightTestBase {
 	@BeforeAll
 	static void launchBrowser() {
 		playwright = Playwright.create();
-		browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
-			.setHeadless(true)
-			.setSlowMo(100)); // Small delay for stability
+		browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true).setSlowMo(100)); // Small
+																													// delay
+																													// for
+																													// stability
 	}
 
 	@AfterAll
@@ -58,10 +62,9 @@ public abstract class PlaywrightTestBase {
 	@BeforeEach
 	void createContextAndPage() {
 		baseUrl = "http://localhost:" + port;
-		context = browser.newContext(new Browser.NewContextOptions()
-			.setViewportSize(1280, 720));
+		context = browser.newContext(new Browser.NewContextOptions().setViewportSize(1280, 720));
 		page = context.newPage();
-		
+
 		// Set default timeout for page operations
 		page.setDefaultTimeout(10000);
 		page.setDefaultNavigationTimeout(30000);

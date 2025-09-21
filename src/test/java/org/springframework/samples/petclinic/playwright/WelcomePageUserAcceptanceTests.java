@@ -23,9 +23,9 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 /**
  * User acceptance tests for the PetClinic welcome page and basic navigation.
- * 
- * These tests verify the core functionality that users expect when first
- * visiting the PetClinic application.
+ *
+ * These tests verify the core functionality that users expect when first visiting the
+ * PetClinic application.
  */
 class WelcomePageUserAcceptanceTests extends PlaywrightTestBase {
 
@@ -51,16 +51,16 @@ class WelcomePageUserAcceptanceTests extends PlaywrightTestBase {
 		// When: They look at the navigation bar
 		// Then: They should see all the main navigation options
 		assertThat(page.locator("nav.navbar")).isVisible();
-		
+
 		// Verify Home link
 		assertThat(page.locator("a[href='/']")).isVisible();
-		
+
 		// Verify Find Owners link
 		assertThat(page.locator("a[href='/owners/find']")).isVisible();
-		
-		// Verify Veterinarians link  
+
+		// Verify Veterinarians link
 		assertThat(page.locator("a[href='/vets.html']")).isVisible();
-		
+
 		// Verify Error link (for demonstration purposes)
 		assertThat(page.locator("a[href='/oups']")).isVisible();
 	}

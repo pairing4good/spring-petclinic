@@ -24,9 +24,9 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 /**
  * User acceptance tests for veterinarian information functionality.
- * 
- * These tests verify that users can view the list of veterinarians and their
- * specialties in the PetClinic application.
+ *
+ * These tests verify that users can view the list of veterinarians and their specialties
+ * in the PetClinic application.
  */
 class VeterinarianUserAcceptanceTests extends PlaywrightTestBase {
 
@@ -46,7 +46,7 @@ class VeterinarianUserAcceptanceTests extends PlaywrightTestBase {
 		// Then: They should see the veterinarians list
 		assertThat(page.locator("h2")).containsText("Veterinarians");
 		assertThat(page.locator("table")).isVisible();
-		
+
 		// Should have column headers for Name and Specialties
 		assertThat(page.locator("th")).containsText("Name");
 		assertThat(page.locator("th")).containsText("Specialties");
@@ -62,7 +62,7 @@ class VeterinarianUserAcceptanceTests extends PlaywrightTestBase {
 		// When: They look at the veterinarians table
 		// Then: Each vet's name should be clearly displayed
 		assertThat(page.locator("table tbody")).isVisible();
-		
+
 		// Should have at least some veterinarians listed (based on test data)
 		if (page.locator("table tbody tr").count() > 0) {
 			assertThat(page.locator("table tbody tr").first()).isVisible();
@@ -79,10 +79,10 @@ class VeterinarianUserAcceptanceTests extends PlaywrightTestBase {
 		// When: They look at the specialties column
 		// Then: Specialties should be clearly displayed for each vet
 		assertThat(page.locator("table")).isVisible();
-		
+
 		// Check that the table structure supports specialty display
 		assertThat(page.locator("th")).containsText("Specialties");
-		
+
 		// If there are vets with specialties, they should be visible
 		if (page.locator("table tbody tr").count() > 0) {
 			// The specialties column should exist for each vet row
@@ -104,7 +104,7 @@ class VeterinarianUserAcceptanceTests extends PlaywrightTestBase {
 		assertThat(page.locator("table.table")).isVisible();
 		assertThat(page.locator("table thead")).isVisible();
 		assertThat(page.locator("table tbody")).isVisible();
-		
+
 		// Table should have proper styling classes for readability
 		assertThat(page.locator("table")).isVisible();
 	}
@@ -118,13 +118,13 @@ class VeterinarianUserAcceptanceTests extends PlaywrightTestBase {
 
 		// When: They look for pagination controls (if needed)
 		// Then: Pagination should be available if there are many vets
-		
+
 		// Check if pagination exists (this depends on the number of vets in test data)
 		if (page.locator(".pagination").count() > 0 || page.locator("a[href*='page=']").count() > 0) {
 			// If pagination exists, it should be functional
 			assertThat(page.locator("a[href*='page=']").first()).isVisible();
 		}
-		
+
 		// At minimum, the page should handle displaying all available vets
 		assertThat(page.locator("table")).isVisible();
 	}
@@ -155,7 +155,7 @@ class VeterinarianUserAcceptanceTests extends PlaywrightTestBase {
 		// Then: Veterinarians link should be easily accessible
 		assertThat(page.locator("nav")).isVisible();
 		assertThat(page.locator("a[href='/vets.html']")).isVisible();
-		
+
 		// Link should be clearly labeled
 		assertThat(page.locator("a[href='/vets.html']")).containsText("Veterinarians");
 	}
