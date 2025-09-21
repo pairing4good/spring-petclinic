@@ -34,7 +34,6 @@ jobs:
     
     runs-on: ubuntu-latest
     needs: build
-    continue-on-error: true  # Don't fail the entire workflow if Playwright tests fail
     strategy:
       matrix:
         java: [ '17' ]
@@ -50,11 +49,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
       - name: Install Playwright browsers
-        run: ./gradlew installPlaywright || echo "Browser installation failed, skipping Playwright tests"
-        continue-on-error: true
+        run: ./gradlew installPlaywright
       - name: Run Playwright tests
-        run: ./gradlew playwrightTest || echo "Playwright tests failed or skipped due to browser installation issues"
-        continue-on-error: true
+        run: ./gradlew playwrightTest
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v4
         if: always()
