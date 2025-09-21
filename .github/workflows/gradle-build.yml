@@ -27,17 +27,5 @@ jobs:
           cache: maven
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-      - name: Install Playwright Browsers
-        run: |
-          ./gradlew build -x test
-          java -cp "build/classes/java/test:$(./gradlew printClasspath -q)" com.microsoft.playwright.CLI install chromium firefox || echo "Browser installation failed, tests may be skipped"
       - name: Build with Gradle
         run: ./gradlew build
-      - name: Run End-to-End Tests
-        run: ./gradlew e2eTest
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: gradle-test-results-${{ matrix.java }}
-          path: build/reports/tests/

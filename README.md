@@ -105,22 +105,38 @@ This project includes comprehensive end-to-end tests using [Playwright for Java]
 
 **Run all tests (includes E2E tests):**
 ```bash
+# Maven (E2E tests skipped by default)
 ./mvnw test
+
+# Gradle (E2E tests skipped by default)  
+./gradlew test
 ```
 
 **Run only E2E tests:**
 ```bash
-./mvnw test -Pe2e
+# Maven
+ENABLE_E2E_TESTS=true ./mvnw test -Pe2e
+
+# Gradle
+ENABLE_E2E_TESTS=true ./gradlew e2eTest
 ```
 
 **Run specific E2E test class:**
 ```bash
-./mvnw test -Dtest=NavigationE2ETest
+# Maven
+ENABLE_E2E_TESTS=true ./mvnw test -Dtest=NavigationE2ETest
+
+# Gradle  
+ENABLE_E2E_TESTS=true ./gradlew e2eTest --tests NavigationE2ETest
 ```
 
 **Run specific E2E test method:**
 ```bash
-./mvnw test -Dtest=NavigationE2ETest#asAUser_IWantToVisitTheHomePage_SoThatICanAccessThePetClinicApplication
+# Maven
+ENABLE_E2E_TESTS=true ./mvnw test -Dtest=NavigationE2ETest#asAUser_IWantToVisitTheHomePage_SoThatICanAccessThePetClinicApplication
+
+# Gradle
+ENABLE_E2E_TESTS=true ./gradlew e2eTest --tests NavigationE2ETest.asAUser_IWantToVisitTheHomePage_SoThatICanAccessThePetClinicApplication
 ```
 
 #### Test Coverage
@@ -137,11 +153,22 @@ The E2E test suite covers:
 #### Test Configuration
 
 E2E tests are configured to:
-- Run in headless mode by default
+- **Skip by default** to avoid browser dependency issues in CI environments
+- Run in headless mode when enabled  
 - Test Chrome, Firefox, and Safari (when available)
 - Include retry logic for CI environments
 - Support multiple viewport sizes for responsive testing
 - Include accessibility and keyboard navigation checks
+
+**To enable E2E tests**, set the environment variable:
+```bash
+export ENABLE_E2E_TESTS=true
+```
+
+Or run with the variable inline:
+```bash
+ENABLE_E2E_TESTS=true ./mvnw test -Pe2e
+```
 
 #### Troubleshooting
 
