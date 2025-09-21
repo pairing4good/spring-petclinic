@@ -82,6 +82,84 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## End-to-End Testing with Playwright
+
+This project includes comprehensive end-to-end tests using [Playwright for Java](https://playwright.dev/java/) to ensure all user flows work correctly across different browsers.
+
+### Running E2E Tests
+
+#### Prerequisites
+- Java 17 or newer
+- Maven 3.6+ 
+
+#### Install Dependencies and Browsers
+```bash
+# Install Maven dependencies
+./mvnw dependency:resolve
+
+# Install Playwright browsers (required for first-time setup)
+./mvnw exec:java -Dexec.mainClass="com.microsoft.playwright.CLI" -Dexec.args="install"
+```
+
+#### Running Tests
+
+**Run all tests (includes E2E tests):**
+```bash
+./mvnw test
+```
+
+**Run only E2E tests:**
+```bash
+./mvnw test -Pe2e
+```
+
+**Run specific E2E test class:**
+```bash
+./mvnw test -Dtest=NavigationE2ETest
+```
+
+**Run specific E2E test method:**
+```bash
+./mvnw test -Dtest=NavigationE2ETest#asAUser_IWantToVisitTheHomePage_SoThatICanAccessThePetClinicApplication
+```
+
+#### Test Coverage
+
+The E2E test suite covers:
+
+- **Navigation and Home Page**: All navigation flows, responsive design, cross-browser compatibility
+- **Owner Management**: Search, add, edit owners with comprehensive form validation
+- **Pet Management**: Add/edit pets, manage visits, pet type validation  
+- **Veterinarian Features**: List viewing, pagination, specialty display
+- **Error Handling**: 404 pages, form validation errors, intentional error pages
+- **Edge Cases**: Invalid inputs, special characters, browser navigation, accessibility
+
+#### Test Configuration
+
+E2E tests are configured to:
+- Run in headless mode by default
+- Test Chrome, Firefox, and Safari (when available)
+- Include retry logic for CI environments
+- Support multiple viewport sizes for responsive testing
+- Include accessibility and keyboard navigation checks
+
+#### Troubleshooting
+
+**Browser installation issues:**
+```bash
+# Manual browser installation
+./mvnw exec:java -Dexec.mainClass="com.microsoft.playwright.CLI" -Dexec.args="install chromium firefox"
+```
+
+**Skipping E2E tests:**
+```bash
+# Run tests excluding E2E tests
+./mvnw test -Dtest=!**/*E2ETest
+```
+
+**Running with visible browser (for debugging):**
+Set the environment variable `PLAYWRIGHT_HEADLESS=false` or modify test configuration.
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.
