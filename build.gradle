@@ -52,12 +52,35 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
+  testImplementation 'com.microsoft.playwright:playwright:1.48.0'
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
   checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
   checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
 
 tasks.named('test') {
   useJUnitPlatform()
+}
+
+task playwrightInstall(type: JavaExec) {
+  group = 'playwright'
+  description = 'Install Playwright browsers'
+  classpath = sourceSets.test.runtimeClasspath
+  mainClass = 'com.microsoft.playwright.CLI'
+  args = ['install']
+}
+
+task playwrightTest(type: Test) {
+  group = 'playwright'
+  description = 'Run Playwright tests'
+  useJUnitPlatform {
+    includeTags 'playwright'
+  }
+  systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+  testLogging {
+    events "passed", "skipped", "failed"
+    exceptionFormat "full"
+  }
 }
 
 checkstyle {
