@@ -82,6 +82,84 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## E2E Testing with Playwright
+
+The project includes comprehensive end-to-end (E2E) tests using Playwright for Java. These tests cover all user-facing functionality and ensure the application works correctly across different browsers.
+
+### Test Structure
+
+The E2E tests are organized using the Page Object Model pattern and located in `src/test/java/org/springframework/samples/petclinic/e2e/`:
+
+- **NavigationAndPagesTest**: Tests basic navigation, page titles, and consistent UI elements
+- **OwnerManagementTest**: Tests owner CRUD operations, search functionality, and pagination
+- **VeterinarianManagementTest**: Tests veterinarian listing, pagination, and data display
+- **PetAndVisitManagementTest**: Tests pet creation, editing, and visit management
+- **ErrorHandlingAndValidationTest**: Tests error pages, form validation, and error recovery
+- **CrossBrowserTest**: Parameterized tests for Chromium, Firefox, and WebKit compatibility
+
+### Running E2E Tests
+
+**Prerequisites:**
+- Java 17 or newer
+- Playwright browsers installed
+
+**Install Playwright browsers:**
+```bash
+mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.classpathScope=test -D exec.args="install"
+```
+
+**Run all E2E tests:**
+```bash
+./mvnw test -Dtest="org.springframework.samples.petclinic.e2e.*"
+```
+
+**Run specific test class:**
+```bash
+./mvnw test -Dtest=NavigationAndPagesTest
+./mvnw test -Dtest=OwnerManagementTest
+```
+
+**Run cross-browser tests:**
+```bash
+./mvnw test -Dtest=CrossBrowserTest
+```
+
+### Test Coverage
+
+The E2E test suite covers:
+
+✅ **Navigation & Routing**: All pages, breadcrumbs, navigation consistency  
+✅ **Owner Management**: Search, create, edit, delete, pagination  
+✅ **Pet Management**: Add pets, edit pet details, manage visits  
+✅ **Veterinarian Listing**: View vets, specialties, pagination  
+✅ **Form Validation**: Required fields, error messages, data validation  
+✅ **Error Handling**: 404/500 errors, graceful error recovery  
+✅ **Cross-Browser**: Chromium, Firefox, WebKit compatibility  
+✅ **Responsive Design**: Desktop, tablet, mobile viewport testing  
+✅ **Accessibility**: Keyboard navigation, ARIA compliance  
+
+### Test Architecture
+
+**Page Object Model**: Each page has a corresponding page object class with methods for interacting with page elements.
+
+**Base Classes**: 
+- `PlaywrightTestBase`: Common setup and configuration for all tests
+- `BasePage`: Common navigation and page elements
+
+**Test Data**: Tests use the default H2 database with sample data, creating unique test data where needed to avoid conflicts.
+
+### Troubleshooting
+
+**Browser installation issues:**
+- Ensure you have sufficient disk space for browser downloads
+- Check network connectivity for browser downloads
+- Try installing browsers individually: `mvn exec:java -D exec.mainClass=com.microsoft.playwright.CLI -D exec.classpathScope=test -D exec.args="install chromium"`
+
+**Test failures:**
+- Ensure the application is running and accessible on the expected port
+- Check for timing issues by increasing wait times in test configuration
+- Verify test data hasn't been modified by other tests
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.

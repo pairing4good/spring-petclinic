@@ -160,8 +160,8 @@ class ErrorHandlingAndValidationTest extends PlaywrightTestBase {
 
 		// This should either return no results or redirect back to search
 		// The actual behavior depends on the application implementation
-		page.getByRole("textbox").fill(nonExistentName);
-		page.getByRole("button", new Page.GetByRoleOptions().setName("Find Owner")).click();
+		page.getByRole(AriaRole.TEXTBOX).fill(nonExistentName);
+		page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Find Owner")).click();
 
 		// Verify we get an appropriate response (either empty list or back to search)
 		// The page should handle this gracefully without crashing
