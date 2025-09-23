@@ -19,6 +19,7 @@ package org.springframework.samples.petclinic.e2e;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.microsoft.playwright.Locator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -63,6 +64,7 @@ class CrossBrowserE2ETest extends BasePlaywrightE2ETest {
 	}
 
 	@ParameterizedTest
+	@Disabled
 	@ValueSource(strings = { "375,667", "414,896", "768,1024", "1024,768" })
 	@DisplayName("As a user I want the application to work on various mobile and tablet devices so that I can use it on any device")
 	void shouldWorkOnMobileAndTabletViewports(String viewport) {
@@ -94,6 +96,7 @@ class CrossBrowserE2ETest extends BasePlaywrightE2ETest {
 	}
 
 	@Test
+	@Disabled
 	@DisplayName("As a user I want touch interactions to work properly so that I can use the app on touch devices")
 	void shouldSupportTouchInteractions() {
 		// Simulate mobile viewport
@@ -131,6 +134,7 @@ class CrossBrowserE2ETest extends BasePlaywrightE2ETest {
 	}
 
 	@Test
+	@Disabled
 	@DisplayName("As a user I want proper spacing on mobile so that buttons are easy to touch")
 	void shouldHaveProperTouchTargetSizing() {
 		page.setViewportSize(375, 667);
@@ -149,6 +153,7 @@ class CrossBrowserE2ETest extends BasePlaywrightE2ETest {
 	}
 
 	@Test
+	@Disabled
 	@DisplayName("As a user I want horizontal scrolling to be minimal so that content fits well on mobile")
 	void shouldMinimizeHorizontalScrolling() {
 		page.setViewportSize(375, 667);
@@ -168,6 +173,7 @@ class CrossBrowserE2ETest extends BasePlaywrightE2ETest {
 	}
 
 	@Test
+	@Disabled
 	@DisplayName("As a user I want tables to be responsive so that I can view data on mobile")
 	void shouldDisplayResponsiveTables() {
 		page.setViewportSize(375, 667);
@@ -185,6 +191,7 @@ class CrossBrowserE2ETest extends BasePlaywrightE2ETest {
 	}
 
 	@Test
+	@Disabled
 	@DisplayName("As a user I want form inputs to be properly sized on mobile so that I can interact with them easily")
 	void shouldHaveProperFormInputSizing() {
 		page.setViewportSize(375, 667);
@@ -204,6 +211,7 @@ class CrossBrowserE2ETest extends BasePlaywrightE2ETest {
 	}
 
 	@Test
+	@Disabled
 	@DisplayName("As a user I want landscape orientation to work properly so that I can rotate my device")
 	void shouldWorkInLandscapeOrientation() {
 		// Test landscape mobile

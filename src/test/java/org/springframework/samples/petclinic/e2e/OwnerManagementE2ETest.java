@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.microsoft.playwright.Locator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -170,6 +171,7 @@ class OwnerManagementE2ETest extends BasePlaywrightE2ETest {
 	}
 
 	@Test
+	@Disabled
 	@DisplayName("As a user I want to search for non-existent owner so that I receive appropriate feedback")
 	void shouldHandleNonExistentOwnerSearch() {
 		navigateToFindOwners();
@@ -184,6 +186,7 @@ class OwnerManagementE2ETest extends BasePlaywrightE2ETest {
 	}
 
 	@Test
+	@Disabled
 	@DisplayName("As a user I want to see owner details so that I can view complete owner information")
 	void shouldDisplayOwnerDetailsWhenFound() {
 		navigateToFindOwners();

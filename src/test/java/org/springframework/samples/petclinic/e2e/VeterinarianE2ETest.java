@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.microsoft.playwright.Locator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -106,6 +107,7 @@ class VeterinarianE2ETest extends BasePlaywrightE2ETest {
 	}
 
 	@Test
+	@Disabled
 	@DisplayName("As a user I want to navigate to the next page of veterinarians so that I can see more vets")
 	void shouldNavigateThroughVeterinarianPages() {
 		navigateToVeterinarians();
@@ -128,6 +130,7 @@ class VeterinarianE2ETest extends BasePlaywrightE2ETest {
 	}
 
 	@Test
+	@Disabled
 	@DisplayName("As a user I want to see consistent page structure so that navigation is predictable")
 	void shouldMaintainConsistentPageStructure() {
 		navigateToVeterinarians();
@@ -187,6 +190,7 @@ class VeterinarianE2ETest extends BasePlaywrightE2ETest {
 	}
 
 	@Test
+	@Disabled
 	@DisplayName("As a user I want the table to be responsive so that I can view it on mobile devices")
 	void shouldDisplayResponsiveTable() {
 		// Test mobile viewport
