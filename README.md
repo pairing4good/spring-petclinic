@@ -173,6 +173,11 @@ The application includes comprehensive Playwright end-to-end tests that cover:
    npx playwright install --with-deps
    ```
 
+   **Note**: In some CI environments or restricted networks, browser installation may fail. In such cases:
+   - Ensure you have sufficient disk space and internet connectivity
+   - Try installing browsers with system package manager: `sudo apt-get install chromium-browser firefox`
+   - Use headless mode for CI environments: `-Dplaywright.headless=true`
+
 2. **Application Running**: E2E tests require the application to be running on `http://localhost:8080`
 
 #### Running E2E Tests
@@ -222,7 +227,15 @@ Test results and debugging artifacts are saved to:
 
 1. **Browser Installation Issues**:
    ```bash
+   # Try alternative browser installation
    npx playwright install --with-deps
+   
+   # If still failing, install browsers manually:
+   # Ubuntu/Debian:
+   sudo apt-get update && sudo apt-get install -y chromium-browser firefox
+   
+   # Or use system environment variable:
+   export PLAYWRIGHT_BROWSERS_PATH=/usr/bin
    ```
 
 2. **Application Not Running**:
@@ -236,8 +249,23 @@ Test results and debugging artifacts are saved to:
    ./mvnw test -Pe2e -Dplaywright.baseurl=http://localhost:8081
    ```
 
-4. **Test Failures**:
+4. **Network/Firewall Issues**:
+   In restricted environments, browser downloads may fail. Use system browsers:
+   ```bash
+   # Set environment variable to use system browsers
+   export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+   # Install system browsers instead
+   sudo apt-get install chromium-browser firefox
+   ```
+
+5. **Test Failures**:
    Check screenshots and traces in the output directories for debugging failed tests
+
+6. **CI/CD Environments**:
+   For GitHub Actions or similar CI systems, ensure:
+   - Use headless mode: `-Dplaywright.headless=true`
+   - Install dependencies: `npx playwright install --with-deps`
+   - Allow adequate timeout for browser installation and test execution
 
 ## Looking for something in particular?
 
