@@ -27,5 +27,15 @@ jobs:
           cache: maven
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Run Playwright E2E tests
+        run: ./gradlew e2eTest
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-gradle
+          path: build/reports/tests/
+          retention-days: 30

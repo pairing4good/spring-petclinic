@@ -127,6 +127,118 @@ The following items should be installed in your system:
 
     Visit [http://localhost:8080](http://localhost:8080) in your browser.
 
+## Running Tests
+
+### Unit and Integration Tests
+
+Spring PetClinic comes with a comprehensive test suite including unit tests, integration tests, and end-to-end tests.
+
+**Maven:**
+```bash
+# Run all tests (including E2E tests)
+./mvnw test
+
+# Run only unit and integration tests (excluding E2E)
+./mvnw test -Dtest="!**/*E2ETest"
+
+# Run only E2E tests
+./mvnw test -Pe2e
+```
+
+**Gradle:**
+```bash
+# Run all tests (including E2E tests)
+./gradlew test
+
+# Run only E2E tests
+./gradlew e2eTest
+```
+
+### End-to-End Tests with Playwright
+
+The application includes comprehensive Playwright end-to-end tests that cover:
+
+- **Homepage and Navigation**: Basic UI navigation and page loading
+- **Owner Management**: Finding, adding, and managing pet owners
+- **Veterinarian Listings**: Viewing veterinarian information and pagination
+- **Error Handling**: Testing error scenarios and edge cases
+- **Cross-Browser Testing**: Compatibility across Chrome, Firefox, and Safari
+- **Responsive Design**: Mobile and tablet viewport testing
+
+#### Prerequisites for E2E Tests
+
+1. **Node.js and npm** (for Playwright browser installation):
+   ```bash
+   # Install Playwright browsers (required for E2E tests)
+   npx playwright install --with-deps
+   ```
+
+2. **Application Running**: E2E tests require the application to be running on `http://localhost:8080`
+
+#### Running E2E Tests
+
+**Maven:**
+```bash
+# Start the application in one terminal
+./mvnw spring-boot:run
+
+# In another terminal, run E2E tests
+./mvnw test -Pe2e
+
+# Or run specific browser tests
+./mvnw test -Pe2e -Dplaywright.browser=firefox
+./mvnw test -Pe2e -Dplaywright.browser=webkit
+```
+
+**Gradle:**
+```bash
+# Start the application in one terminal
+./gradlew bootRun
+
+# In another terminal, run E2E tests
+./gradlew e2eTest
+
+# Or run specific browser tests
+./gradlew e2eTest -Dplaywright.browser=firefox
+./gradlew e2eTest -Dplaywright.browser=webkit
+```
+
+#### E2E Test Configuration
+
+E2E tests can be configured via system properties:
+
+- `playwright.browser`: Browser to use (`chromium`, `firefox`, `webkit`)
+- `playwright.headless`: Run in headless mode (`true`/`false`)
+- `playwright.baseurl`: Base URL for testing (default: `http://localhost:8080`)
+
+#### Test Reports and Debugging
+
+Test results and debugging artifacts are saved to:
+
+- **Maven**: `target/playwright-screenshots/`, `target/playwright-traces/`
+- **Gradle**: `build/playwright-screenshots/`, `build/playwright-traces/`
+
+#### Troubleshooting E2E Tests
+
+1. **Browser Installation Issues**:
+   ```bash
+   npx playwright install --with-deps
+   ```
+
+2. **Application Not Running**:
+   Ensure the application is running on `http://localhost:8080` before running E2E tests
+
+3. **Port Conflicts**:
+   If port 8080 is in use, start the application on a different port:
+   ```bash
+   ./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=8081
+   # Then run tests with:
+   ./mvnw test -Pe2e -Dplaywright.baseurl=http://localhost:8081
+   ```
+
+4. **Test Failures**:
+   Check screenshots and traces in the output directories for debugging failed tests
+
 ## Looking for something in particular?
 
 |Spring Boot Configuration | Class or Java property files  |
