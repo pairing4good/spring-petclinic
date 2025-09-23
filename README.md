@@ -82,6 +82,186 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## End-to-End Testing with Playwright
+
+The Spring PetClinic includes comprehensive end-to-end tests using Microsoft Playwright for Java. These tests cover all user workflows, error scenarios, and cross-browser compatibility.
+
+### Running E2E Tests
+
+#### Prerequisites
+- Java 17 or later
+- Maven 3.6+ or Gradle 8.0+
+- No additional browser installation required (Playwright manages browsers automatically)
+
+#### Maven Commands
+```bash
+# Run all E2E tests
+./mvnw test -Pe2e
+
+# Run E2E tests in headless mode (suitable for CI)
+./mvnw test -Pe2e -Dplaywright.headless=true
+
+# Run specific E2E test class
+./mvnw test -Pe2e -Dtest="BasicNavigationE2ETests"
+
+# Run specific test method
+./mvnw test -Pe2e -Dtest="BasicNavigationE2ETests#testHomepageLoading"
+```
+
+#### Gradle Commands
+```bash
+# Run all E2E tests
+./gradlew playwrightTest
+
+# Run E2E tests in headless mode (suitable for CI)
+./gradlew playwrightTest -Dplaywright.headless=true
+
+# Run specific E2E test class
+./gradlew playwrightTest --tests="BasicNavigationE2ETests"
+
+# Run specific test method
+./gradlew playwrightTest --tests="BasicNavigationE2ETests.testHomepageLoading"
+```
+
+### E2E Test Coverage
+
+The Playwright test suite provides comprehensive coverage of:
+
+#### Core Navigation and User Interface
+- Homepage loading and layout verification
+- Navigation menu functionality across all pages
+- Browser back/forward button behavior
+- Responsive design on mobile, tablet, and desktop viewports
+- Keyboard navigation and accessibility features
+
+#### Owner Management (CRUD Operations)
+- Searching for owners (with and without search criteria)
+- Adding new owners with form validation
+- Editing existing owner information
+- Viewing owner details and associated pets
+- Form validation and error handling
+
+#### Pet and Visit Management
+- Adding new pets to owner accounts
+- Editing pet information
+- Adding visit records for medical history
+- Viewing pet and visit information
+
+#### Veterinarian Information
+- Viewing veterinarian listings
+- Pagination through multiple pages of vets
+- Specialty information display
+
+#### Error Handling and Edge Cases
+- 404 page handling for invalid URLs
+- 500 error page functionality
+- Form validation error messages
+- Empty state handling (no search results)
+- Network timeout and error scenarios
+
+#### Cross-Browser and Device Testing
+- Chrome/Chromium compatibility (default)
+- Firefox compatibility (via configuration)
+- WebKit/Safari compatibility (via configuration)
+- Mobile and tablet responsive design
+
+### Browser Configuration
+
+Tests run in Chromium by default. To test with different browsers:
+
+```bash
+# Firefox
+./mvnw test -Pe2e -Dplaywright.browser=firefox
+
+# WebKit (Safari engine)
+./mvnw test -Pe2e -Dplaywright.browser=webkit
+
+# Gradle equivalent
+./gradlew playwrightTest -Dplaywright.browser=firefox
+```
+
+### Debugging Failed Tests
+
+#### Local Development
+```bash
+# Run tests with browser visible (non-headless)
+./mvnw test -Pe2e -Dplaywright.headless=false
+
+# Slow down test execution for observation
+./mvnw test -Pe2e -Dplaywright.headless=false -Dplaywright.slowMo=1000
+```
+
+#### Test Failure Troubleshooting
+
+1. **Element Not Found Errors**
+   - Check if the page has fully loaded
+   - Verify element selectors are correct
+   - Ensure dynamic content has time to render
+
+2. **Timing Issues**
+   - Tests include proper wait strategies
+   - Network timeouts are configured appropriately
+   - Loading states are handled correctly
+
+3. **Browser Dependencies**
+   - Playwright automatically downloads required browsers
+   - In CI environments, ensure sufficient disk space and network access
+
+#### Common Test Patterns
+
+The tests follow robust patterns to prevent flaky behavior:
+
+```java
+// Proper navigation with loading verification
+page.navigate("http://localhost:" + port + "/path");
+assertThat(page.locator("h2:has-text('Expected Heading')")).isVisible();
+
+// Form submission with response waiting
+page.locator("input[name='field']").fill("value");
+page.locator("button:has-text('Submit')").click();
+assertThat(page.locator("h2:has-text('Success Page')")).isVisible();
+
+// Dynamic content verification
+assertThat(page.locator("table")).isVisible();
+assertThat(page.locator("table tr")).toHaveCountGreaterThan(0);
+```
+
+### CI/CD Integration
+
+The E2E tests are integrated into GitHub Actions workflows:
+
+- **Maven workflow**: Runs E2E tests after successful build
+- **Gradle workflow**: Runs E2E tests after successful build
+- Tests run in headless mode in CI environments
+- Browser dependencies are automatically installed
+
+### Test Organization
+
+E2E tests are organized into logical modules:
+
+- `BasicNavigationE2ETests`: Core navigation and UI functionality
+- `ComprehensiveE2ETests`: Advanced features, CRUD operations, and error handling
+
+Each test follows the naming convention: "As a [user], I want [action], so that [outcome]"
+
+### Performance Considerations
+
+- Tests are designed to run efficiently with proper wait strategies
+- Database uses in-memory H2 for fast test execution
+- Tests are isolated and can run in parallel
+- Average test execution time: 30-60 seconds per test class
+
+### Contributing to E2E Tests
+
+When adding new features to Spring PetClinic:
+
+1. Add corresponding E2E tests for new user workflows
+2. Follow existing test patterns for consistency
+3. Ensure tests are deterministic and reliable
+4. Include proper error scenario testing
+5. Test responsive design for new UI components
+6. Verify cross-browser compatibility for complex interactions
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.

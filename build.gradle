@@ -52,12 +52,21 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
+  testImplementation 'com.microsoft.playwright:playwright:1.48.0'
   checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
   checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
 
 tasks.named('test') {
   useJUnitPlatform()
+}
+
+task playwrightTest(type: Test) {
+  useJUnitPlatform()
+  include '**/*E2ETests.class'
+  include '**/*E2ETest.class'
+  systemProperty 'playwright.browser', 'chromium'
+  systemProperty 'playwright.headless', 'true'
 }
 
 checkstyle {

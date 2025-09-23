@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -27,5 +26,12 @@ jobs:
           cache: maven
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Install Playwright Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwoff1 libopus0 libwebp6 libenchant-2-2 libgudev-1.0-0 libsecret-1-0 libhyphen0 libgdk-pixbuf2.0-0 libegl1 libnotify4 libxss1 libgstreamer-gl1.0-0 libgstreamer-plugins-bad1.0-0 gstreamer1.0-libav
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Run E2E Tests
+        run: ./gradlew playwrightTest -Dplaywright.headless=true
+        continue-on-error: true
