@@ -82,6 +82,88 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## Running Tests
+
+The Spring PetClinic project includes comprehensive test coverage with unit tests, integration tests, and end-to-end (E2E) tests.
+
+### Running All Tests
+
+**With Maven:**
+```bash
+./mvnw test
+```
+
+**With Gradle:**
+```bash
+./gradlew test
+```
+
+### Running Specific Test Types
+
+#### Unit and Integration Tests
+**With Maven:**
+```bash
+./mvnw test -Dtest="!*E2ETest"
+```
+
+**With Gradle:**
+```bash
+./gradlew test --tests "*" --exclude-tags "e2e"
+```
+
+#### End-to-End Tests Only
+**With Maven:**
+```bash
+./mvnw test -Dtest="*E2ETest"
+```
+
+**With Gradle:**
+```bash
+./gradlew test --tests "*E2ETest"
+```
+
+### End-to-End Test Coverage
+
+The E2E test suite provides comprehensive coverage of all user flows:
+
+- **SimpleE2ETest**: Basic functionality and page accessibility (6 tests)
+- **OwnerManagementE2ETest**: Complete owner CRUD operations, search, and validation (9 tests)
+- **PetManagementE2ETest**: Pet registration, editing, and validation scenarios (9 tests)
+- **VisitManagementE2ETest**: Visit scheduling, validation, and error handling (10 tests)
+
+**Total: 34 comprehensive E2E tests covering all user workflows**
+
+### Test Environment Requirements
+
+The E2E tests use Spring Boot's test framework with TestRestTemplate for reliable HTTP-based testing. The tests:
+
+- Run against an embedded H2 database for isolation
+- Use random ports to avoid conflicts
+- Include comprehensive validation of forms, error scenarios, and edge cases
+- Cover both positive and negative test scenarios
+
+### Troubleshooting Tests
+
+#### Common Issues
+
+1. **Port conflicts**: Tests use random ports automatically
+2. **Database conflicts**: Each test uses isolated H2 instances
+3. **Network timeouts**: Tests include appropriate timeouts and retries
+
+#### Running Tests in IDE
+
+All tests can be run directly in your IDE (IntelliJ IDEA, Eclipse, VS Code) by:
+1. Right-clicking on test classes or packages
+2. Selecting "Run Tests" or "Debug Tests"
+3. Using IDE-specific test runners
+
+#### CI/CD Integration
+
+Tests are automatically run in GitHub Actions workflows:
+- Maven build: Runs all tests including E2E
+- Gradle build: Runs all tests including E2E
+- Both workflows fail fast on any test failure
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.

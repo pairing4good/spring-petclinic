@@ -29,3 +29,5 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Run E2E Tests
+        run: ./gradlew test --tests "*E2ETest"
