@@ -52,12 +52,29 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
+  testImplementation 'com.microsoft.playwright:playwright:1.50.0'
   checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
   checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
 
 tasks.named('test') {
   useJUnitPlatform()
+}
+
+// Create separate task for Playwright E2E tests
+task playwrightTest(type: Test) {
+  useJUnitPlatform {
+    includeTags 'playwright'
+  }
+  testClassesDirs = sourceSets.test.output.classesDirs
+  classpath = sourceSets.test.runtimeClasspath
+  systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+}
+
+// Include Playwright tests in the main test task
+test {
+  useJUnitPlatform()
+  systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 }
 
 checkstyle {
