@@ -78,6 +78,83 @@ or
 docker compose up postgres
 ```
 
+## End-to-End Testing with Playwright
+
+This application includes comprehensive end-to-end tests using Playwright for Java. These tests cover all user flows, error scenarios, and edge cases to ensure application reliability.
+
+### Running E2E Tests
+
+The application includes comprehensive Playwright end-to-end tests that cover:
+- Homepage and navigation functionality
+- Owner management (find, create, update owners)
+- Pet management (add pets, manage visits)  
+- Veterinarian listings
+- Error handling and validation
+- Responsive design across different viewports
+- Cross-browser compatibility
+
+#### Prerequisites for E2E Tests
+
+- Java 17 or newer
+- A compatible browser (Chromium, Chrome, Firefox, or Safari)
+- The Playwright Java library (included as dependency)
+
+#### Running All Tests
+
+**With Maven:**
+```bash
+# Run all tests including E2E tests
+./mvnw test
+
+# Run only E2E tests
+./mvnw test -Pe2e
+
+# Run with specific browsers (when properly configured)
+./mvnw test -Pe2e -Dplaywright.browser=chromium
+```
+
+**With Gradle:**
+```bash
+# Run all tests including E2E tests  
+./gradlew test
+
+# Run only E2E tests
+./gradlew playwrightTest
+
+# Run with verbose output
+./gradlew test --info
+```
+
+#### Test Organization
+
+E2E tests are organized by functionality:
+- `HomePageE2ETest` - Homepage navigation and basic functionality
+- `OwnerManagementE2ETest` - Owner CRUD operations and search
+- `PetManagementE2ETest` - Pet and visit management  
+- `VeterinarianE2ETest` - Veterinarian listings and details
+- `ErrorHandlingE2ETest` - Error pages and validation scenarios
+
+#### Test Environment Configuration
+
+Tests are configured to:
+- Run in headless mode by default for CI/CD
+- Skip automatically if no browser is available
+- Use appropriate timeouts and retry mechanisms
+- Test responsive design on multiple viewport sizes
+- Validate both positive and negative user scenarios
+
+#### Troubleshooting E2E Tests
+
+**If tests are skipped:**
+- Ensure a compatible browser is installed on your system
+- Check that the application starts successfully on the test port
+- Verify Java 17+ is being used
+
+**For CI/CD environments:**
+- Tests will install browser dependencies automatically
+- Failed tests will cause the build to fail immediately
+- Test results are included in standard test reports
+
 ## Test Applications
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
