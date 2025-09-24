@@ -49,3 +49,8 @@ out/
 _site/
 *.css
 !petclinic.css
+
+### Node.js ###
+node_modules/
+package-lock.json
+package.json

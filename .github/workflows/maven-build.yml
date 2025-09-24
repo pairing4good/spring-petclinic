@@ -25,5 +25,7 @@ jobs:
           java-version: ${{matrix.java}}
           distribution: 'adopt'
           cache: maven
-      - name: Build with Maven Wrapper
+      - name: Build with Maven Wrapper (includes Playwright E2E tests)
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
         run: ./mvnw -B verify
