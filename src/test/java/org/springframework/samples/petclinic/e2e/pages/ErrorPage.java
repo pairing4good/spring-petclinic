@@ -31,7 +31,7 @@ public class ErrorPage extends BasePage {
 
 	public ErrorPage(Page page, String baseUrl) {
 		super(page, baseUrl);
-		this.errorHeading = page.getByRole("heading", new Page.GetByRoleOptions().setName("Something happened..."));
+		this.errorHeading = page.locator("h2:has-text('Something happened...')");
 		this.errorImage = page.locator("img").first(); // Error page image
 		this.errorDescription = page.locator("p");
 	}

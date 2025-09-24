@@ -33,10 +33,10 @@ public class FindOwnersPage extends BasePage {
 
 	public FindOwnersPage(Page page, String baseUrl) {
 		super(page, baseUrl);
-		this.findOwnersHeading = page.getByRole("heading", new Page.GetByRoleOptions().setName("Find Owners"));
+		this.findOwnersHeading = page.locator("h2:has-text('Find Owners')");
 		this.lastNameInput = page.locator("#lastName");
-		this.findOwnerButton = page.getByRole("button", new Page.GetByRoleOptions().setName("Find Owner"));
-		this.addOwnerLink = page.getByRole("link", new Page.GetByRoleOptions().setName("Add Owner"));
+		this.findOwnerButton = page.locator("button:has-text('Find Owner')");
+		this.addOwnerLink = page.locator("a:has-text('Add Owner')");
 	}
 
 	public void navigateTo() {

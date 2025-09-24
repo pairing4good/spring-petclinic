@@ -47,7 +47,8 @@ public abstract class PlaywrightTestBase {
 		try {
 			playwright = Playwright.create();
 			browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true).setSlowMo(0));
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			System.err.println("Playwright browser installation failed: " + e.getMessage());
 			System.err.println("E2E tests will be skipped. In CI/CD, browsers should be pre-installed.");
 			// Don't throw exception, let individual tests handle the null browser
@@ -65,7 +66,7 @@ public abstract class PlaywrightTestBase {
 	void createPage() {
 		// Skip tests if browser is not available
 		Assumptions.assumeTrue(browser != null, "Playwright browser not available - skipping E2E test");
-		
+
 		baseUrl = "http://localhost:" + port;
 		page = browser.newPage();
 		// Set a reasonable timeout for tests

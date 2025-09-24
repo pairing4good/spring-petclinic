@@ -29,7 +29,7 @@ public class HomePage extends BasePage {
 
 	public HomePage(Page page, String baseUrl) {
 		super(page, baseUrl);
-		this.welcomeHeading = page.getByRole("heading", new Page.GetByRoleOptions().setName("Welcome"));
+		this.welcomeHeading = page.locator("h2:has-text('Welcome')");
 		this.petImage = page.locator("img").first(); // Pet image on homepage
 	}
 

@@ -39,10 +39,10 @@ public abstract class BasePage {
 	protected BasePage(Page page, String baseUrl) {
 		this.page = page;
 		this.baseUrl = baseUrl;
-		this.homeLink = page.getByRole("link", new Page.GetByRoleOptions().setName(" Home"));
-		this.findOwnersLink = page.getByRole("link", new Page.GetByRoleOptions().setName(" Find Owners"));
-		this.veterinariansLink = page.getByRole("link", new Page.GetByRoleOptions().setName(" Veterinarians"));
-		this.errorLink = page.getByRole("link", new Page.GetByRoleOptions().setName(" Error"));
+		this.homeLink = page.locator("a[href='/']");
+		this.findOwnersLink = page.locator("a[href='/owners/find']");
+		this.veterinariansLink = page.locator("a[href='/vets.html']");
+		this.errorLink = page.locator("a[href='/oups']");
 	}
 
 	public String getPageTitle() {

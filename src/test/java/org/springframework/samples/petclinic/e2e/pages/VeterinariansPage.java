@@ -35,10 +35,10 @@ public class VeterinariansPage extends BasePage {
 
 	public VeterinariansPage(Page page, String baseUrl) {
 		super(page, baseUrl);
-		this.veterinariansHeading = page.getByRole("heading", new Page.GetByRoleOptions().setName("Veterinarians"));
+		this.veterinariansHeading = page.locator("h2:has-text('Veterinarians')");
 		this.veterinariansTable = page.locator("table");
 		this.paginationInfo = page.locator("text=pages");
-		this.nextPageLink = page.getByRole("link", new Page.GetByRoleOptions().setName("2"));
+		this.nextPageLink = page.locator("a:has-text('2')");
 		this.previousPageLink = page.locator("text=Previous");
 	}
 

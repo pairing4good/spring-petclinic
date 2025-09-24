@@ -45,15 +45,14 @@ public class OwnerDetailsPage extends BasePage {
 
 	public OwnerDetailsPage(Page page, String baseUrl) {
 		super(page, baseUrl);
-		this.ownerInformationHeading = page.getByRole("heading",
-				new Page.GetByRoleOptions().setName("Owner Information"));
+		this.ownerInformationHeading = page.locator("h2:has-text('Owner Information')");
 		this.ownerName = page.locator("table.table-striped tr:nth-child(1) td");
 		this.ownerAddress = page.locator("table.table-striped tr:nth-child(2) td");
 		this.ownerCity = page.locator("table.table-striped tr:nth-child(3) td");
 		this.ownerTelephone = page.locator("table.table-striped tr:nth-child(4) td");
-		this.editOwnerLink = page.getByRole("link", new Page.GetByRoleOptions().setName("Edit Owner"));
-		this.addNewPetLink = page.getByRole("link", new Page.GetByRoleOptions().setName("Add New Pet"));
-		this.petsAndVisitsHeading = page.getByRole("heading", new Page.GetByRoleOptions().setName("Pets and Visits"));
+		this.editOwnerLink = page.locator("a:has-text('Edit Owner')");
+		this.addNewPetLink = page.locator("a:has-text('Add New Pet')");
+		this.petsAndVisitsHeading = page.locator("h2:has-text('Pets and Visits')");
 		this.successMessage = page.locator("#success-message");
 		this.errorMessage = page.locator("#error-message");
 	}

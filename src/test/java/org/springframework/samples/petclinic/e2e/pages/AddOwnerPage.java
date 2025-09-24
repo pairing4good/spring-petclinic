@@ -39,13 +39,13 @@ public class AddOwnerPage extends BasePage {
 
 	public AddOwnerPage(Page page, String baseUrl) {
 		super(page, baseUrl);
-		this.ownerHeading = page.getByRole("heading", new Page.GetByRoleOptions().setName("Owner"));
-		this.firstNameInput = page.getByLabel("First Name");
-		this.lastNameInput = page.getByLabel("Last Name");
-		this.addressInput = page.getByLabel("Address");
-		this.cityInput = page.getByLabel("City");
-		this.telephoneInput = page.getByLabel("Telephone");
-		this.addOwnerButton = page.getByRole("button", new Page.GetByRoleOptions().setName("Add Owner"));
+		this.ownerHeading = page.locator("h2:has-text('Owner')");
+		this.firstNameInput = page.locator("input[id*='firstName'], input[name*='firstName']");
+		this.lastNameInput = page.locator("input[id*='lastName'], input[name*='lastName']");
+		this.addressInput = page.locator("input[id*='address'], input[name*='address']");
+		this.cityInput = page.locator("input[id*='city'], input[name*='city']");
+		this.telephoneInput = page.locator("input[id*='telephone'], input[name*='telephone']");
+		this.addOwnerButton = page.locator("button:has-text('Add Owner')");
 	}
 
 	public void navigateTo() {
