@@ -20,12 +20,10 @@ import com.microsoft.playwright.Page;
 
 /**
  * Page Object Model for the Owner Details page.
- * 
- * Provides methods to interact with elements on the owner details page including:
- * - Owner information display
- * - Pet information display
- * - Visit information display
- * - Action buttons (edit owner, add pet, add visit)
+ *
+ * Provides methods to interact with elements on the owner details page including: - Owner
+ * information display - Pet information display - Visit information display - Action
+ * buttons (edit owner, add pet, add visit)
  */
 public class OwnerDetailsPage {
 
@@ -52,13 +50,17 @@ public class OwnerDetailsPage {
 		this.page = page;
 		// Using specific selectors for owner details page elements
 		this.pageHeading = page.locator("h2").filter(new Locator.FilterOptions().setHasText("Owner Information"));
-		this.ownerInfoTable = page.locator("table.table-striped").first(); // First table is owner info
+		this.ownerInfoTable = page.locator("table.table-striped").first(); // First table
+																			// is owner
+																			// info
 		this.editOwnerButton = page.locator("a.btn").filter(new Locator.FilterOptions().setHasText("Edit Owner"));
 		this.addPetButton = page.locator("a.btn").filter(new Locator.FilterOptions().setHasText("Add New Pet"));
-		this.petsAndVisitsHeading = page.locator("h2").filter(new Locator.FilterOptions().setHasText("Pets and Visits"));
+		this.petsAndVisitsHeading = page.locator("h2")
+			.filter(new Locator.FilterOptions().setHasText("Pets and Visits"));
 		this.successMessage = page.locator("#success-message, .alert-success");
 		this.errorMessage = page.locator("#error-message, .alert-danger");
-		this.petsTable = page.locator("table.table-striped").nth(1); // Second table is pets
+		this.petsTable = page.locator("table.table-striped").nth(1); // Second table is
+																		// pets
 	}
 
 	/**
@@ -82,8 +84,10 @@ public class OwnerDetailsPage {
 	public String getOwnerName() {
 		ownerInfoTable.waitFor();
 		// Find the name row and get the value
-		return ownerInfoTable.locator("tr").filter(new Locator.FilterOptions().setHasText("Name")).locator("b")
-				.textContent();
+		return ownerInfoTable.locator("tr")
+			.filter(new Locator.FilterOptions().setHasText("Name"))
+			.locator("b")
+			.textContent();
 	}
 
 	/**
@@ -92,8 +96,11 @@ public class OwnerDetailsPage {
 	public String getOwnerAddress() {
 		try {
 			ownerInfoTable.waitFor();
-			return ownerInfoTable.locator("tr").filter(new Locator.FilterOptions().setHasText("Address")).locator("td")
-					.nth(1).textContent();
+			return ownerInfoTable.locator("tr")
+				.filter(new Locator.FilterOptions().setHasText("Address"))
+				.locator("td")
+				.nth(1)
+				.textContent();
 		}
 		catch (Exception e) {
 			return "";
@@ -106,8 +113,11 @@ public class OwnerDetailsPage {
 	public String getOwnerCity() {
 		try {
 			ownerInfoTable.waitFor();
-			return ownerInfoTable.locator("tr").filter(new Locator.FilterOptions().setHasText("City")).locator("td")
-					.nth(1).textContent();
+			return ownerInfoTable.locator("tr")
+				.filter(new Locator.FilterOptions().setHasText("City"))
+				.locator("td")
+				.nth(1)
+				.textContent();
 		}
 		catch (Exception e) {
 			return "";
@@ -120,8 +130,11 @@ public class OwnerDetailsPage {
 	public String getOwnerTelephone() {
 		try {
 			ownerInfoTable.waitFor();
-			return ownerInfoTable.locator("tr").filter(new Locator.FilterOptions().setHasText("Telephone"))
-					.locator("td").nth(1).textContent();
+			return ownerInfoTable.locator("tr")
+				.filter(new Locator.FilterOptions().setHasText("Telephone"))
+				.locator("td")
+				.nth(1)
+				.textContent();
 		}
 		catch (Exception e) {
 			return "";

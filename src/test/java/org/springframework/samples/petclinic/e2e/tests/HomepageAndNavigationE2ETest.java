@@ -26,14 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Comprehensive E2E tests for Homepage and Navigation functionality.
- * 
- * Tests cover:
- * - Homepage loading and content verification
- * - Navigation menu functionality
- * - Responsive design across different viewport sizes
- * - Page title and meta information
- * - Cross-browser compatibility (when run with different browsers)
- * - Accessibility features
+ *
+ * Tests cover: - Homepage loading and content verification - Navigation menu
+ * functionality - Responsive design across different viewport sizes - Page title and meta
+ * information - Cross-browser compatibility (when run with different browsers) -
+ * Accessibility features
  */
 @DisplayName("Homepage and Navigation E2E Tests")
 class HomepageAndNavigationE2ETest extends BaseE2ETest {
@@ -169,7 +166,8 @@ class HomepageAndNavigationE2ETest extends BaseE2ETest {
 		// Then: The page should be responsive and navigation should be accessible
 		assertTrue(homePage.isLoaded(), "Homepage should load on tablet viewport");
 
-		// And: Navigation links should be accessible (either visible directly or through mobile toggle)
+		// And: Navigation links should be accessible (either visible directly or through
+		// mobile toggle)
 		assertTrue(homePage.areAllNavigationLinksVisible() || isElementVisible(".navbar-toggler, .nav-toggle"),
 				"Navigation links should be visible or accessible via toggle on tablet");
 	}
@@ -211,7 +209,8 @@ class HomepageAndNavigationE2ETest extends BaseE2ETest {
 		page.keyboard().press("Tab");
 
 		// Then: Focus should move through navigation elements
-		// Note: This is a basic test - full accessibility testing would require more specialized tools
+		// Note: This is a basic test - full accessibility testing would require more
+		// specialized tools
 		assertTrue(page.locator("a:focus, button:focus").count() >= 0,
 				"Should be able to tab through focusable elements");
 	}
@@ -244,12 +243,14 @@ class HomepageAndNavigationE2ETest extends BaseE2ETest {
 		assertTrue(title.contains("PetClinic"), "Page title should contain application name");
 		assertTrue(title.contains("Spring Framework"), "Page title should mention Spring Framework");
 
-		// And: The page should have essential meta tags (check using Playwright locator directly)
+		// And: The page should have essential meta tags (check using Playwright locator
+		// directly)
 		assertTrue(page.locator("meta[name='viewport']").count() > 0, "Page should have viewport meta tag");
-		
+
 		// And: The page should render properly (which indicates proper charset handling)
 		assertTrue(homePage.isLoaded(), "Page should load properly with correct charset");
-		assertTrue(homePage.getWelcomeMessage().equals("Welcome"), "Text should render correctly indicating proper charset");
+		assertTrue(homePage.getWelcomeMessage().equals("Welcome"),
+				"Text should render correctly indicating proper charset");
 	}
 
 }

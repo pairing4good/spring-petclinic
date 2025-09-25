@@ -20,12 +20,9 @@ import com.microsoft.playwright.Page;
 
 /**
  * Page Object Model for the Add/Create Owner page.
- * 
- * Provides methods to interact with elements on the add owner form including:
- * - Form field interactions
- * - Form validation
- * - Form submission
- * - Error handling
+ *
+ * Provides methods to interact with elements on the add owner form including: - Form
+ * field interactions - Form validation - Form submission - Error handling
  */
 public class AddOwnerPage {
 

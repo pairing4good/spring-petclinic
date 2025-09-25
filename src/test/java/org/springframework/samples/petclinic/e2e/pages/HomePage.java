@@ -20,11 +20,9 @@ import com.microsoft.playwright.Page;
 
 /**
  * Page Object Model for the Home/Welcome page.
- * 
- * Provides methods to interact with elements on the home page including:
- * - Navigation verification
- * - Welcome message validation
- * - Navigation menu interactions
+ *
+ * Provides methods to interact with elements on the home page including: - Navigation
+ * verification - Welcome message validation - Navigation menu interactions
  */
 public class HomePage {
 
@@ -51,8 +49,10 @@ public class HomePage {
 		this.welcomeHeading = page.locator("h2").filter(new Locator.FilterOptions().setHasText("Welcome"));
 		this.petImage = page.locator("img[src*='pets.png']");
 		this.homeNavLink = page.locator("nav .nav-link").filter(new Locator.FilterOptions().setHasText("Home"));
-		this.findOwnersNavLink = page.locator("nav .nav-link").filter(new Locator.FilterOptions().setHasText("Find owners"));
-		this.vetsNavLink = page.locator("nav .nav-link").filter(new Locator.FilterOptions().setHasText("Veterinarians"));
+		this.findOwnersNavLink = page.locator("nav .nav-link")
+			.filter(new Locator.FilterOptions().setHasText("Find owners"));
+		this.vetsNavLink = page.locator("nav .nav-link")
+			.filter(new Locator.FilterOptions().setHasText("Veterinarians"));
 		this.errorNavLink = page.locator("nav .nav-link").filter(new Locator.FilterOptions().setHasText("Error"));
 		this.springLogo = page.locator("img[alt*='VMware Tanzu Logo']");
 	}

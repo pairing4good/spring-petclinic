@@ -20,12 +20,9 @@ import com.microsoft.playwright.Page;
 
 /**
  * Page Object Model for the Find Owners page.
- * 
- * Provides methods to interact with elements on the find owners page including:
- * - Owner search functionality
- * - Form validation
- * - Navigation to add new owner
- * - Results handling
+ *
+ * Provides methods to interact with elements on the find owners page including: - Owner
+ * search functionality - Form validation - Navigation to add new owner - Results handling
  */
 public class FindOwnersPage {
 
@@ -51,7 +48,8 @@ public class FindOwnersPage {
 		// Using specific selectors with context for disambiguation
 		this.pageHeading = page.locator("h2").filter(new Locator.FilterOptions().setHasText("Find Owners"));
 		this.lastNameInput = page.locator("input[name='lastName']");
-		this.findOwnerButton = page.locator("button[type='submit']").filter(new Locator.FilterOptions().setHasText("Find Owner"));
+		this.findOwnerButton = page.locator("button[type='submit']")
+			.filter(new Locator.FilterOptions().setHasText("Find Owner"));
 		this.addOwnerButton = page.locator("a.btn").filter(new Locator.FilterOptions().setHasText("Add Owner"));
 		this.searchForm = page.locator("form#search-owner-form");
 		this.errorMessages = page.locator(".help-inline p");

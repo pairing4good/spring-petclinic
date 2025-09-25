@@ -26,13 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Comprehensive E2E tests for Veterinarians page and Error Handling functionality.
- * 
- * Tests cover:
- * - Veterinarians page loading and data display
- * - Error page handling (500 errors, 404 errors)
- * - Edge cases and boundary conditions
- * - User feedback and error messages
- * - Recovery from error states
+ *
+ * Tests cover: - Veterinarians page loading and data display - Error page handling (500
+ * errors, 404 errors) - Edge cases and boundary conditions - User feedback and error
+ * messages - Recovery from error states
  */
 @DisplayName("Veterinarians and Error Handling E2E Tests")
 class VeterinariansAndErrorHandlingE2ETest extends BaseE2ETest {
@@ -89,7 +86,8 @@ class VeterinariansAndErrorHandlingE2ETest extends BaseE2ETest {
 
 		// Then: If there are veterinarians, I should see their specialty information
 		if (veterinariansPage.hasVeterinarianData()) {
-			// Veterinarians may or may not have specialties, so just verify the method works
+			// Veterinarians may or may not have specialties, so just verify the method
+			// works
 			String specialties = veterinariansPage.getVetSpecialties(0);
 			assertTrue(specialties != null, "Specialties should not be null");
 		}
@@ -122,18 +120,20 @@ class VeterinariansAndErrorHandlingE2ETest extends BaseE2ETest {
 
 		// Then: I should get an appropriate response (404 or redirect)
 		waitForPageLoad();
-		
+
 		// The application might handle 404s differently, so check for common patterns
 		String currentUrl = page.url();
 		String pageContent = page.content();
-		
-		// Spring Boot apps often redirect to error page or home page for non-existent URLs
-		assertTrue(currentUrl.contains("404") || currentUrl.contains("error") || 
-				   pageContent.contains("404") || pageContent.contains("not found") ||
-				   pageContent.contains("Something happened") || // Custom error page
-				   currentUrl.equals(getBaseUrl() + "/") || // Might redirect to home
-				   page.locator("h2").count() > 0, // Has some valid page content
-				   "Should handle non-existent URLs appropriately");
+
+		// Spring Boot apps often redirect to error page or home page for non-existent
+		// URLs
+		assertTrue(currentUrl.contains("404") || currentUrl.contains("error") || pageContent.contains("404")
+				|| pageContent.contains("not found") || pageContent.contains("Something happened") || // Custom
+																										// error
+																										// page
+				currentUrl.equals(getBaseUrl() + "/") || // Might redirect to home
+				page.locator("h2").count() > 0, // Has some valid page content
+				"Should handle non-existent URLs appropriately");
 	}
 
 	@Test
@@ -149,7 +149,7 @@ class VeterinariansAndErrorHandlingE2ETest extends BaseE2ETest {
 
 		// Then: I should be able to continue using the application normally
 		assertTrue(isElementVisible("h2"), "Should be able to return to normal pages");
-		
+
 		// And: I should be able to navigate to other pages
 		navigateToPath("/owners/find");
 		waitForPageLoad();
@@ -182,14 +182,18 @@ class VeterinariansAndErrorHandlingE2ETest extends BaseE2ETest {
 
 		// When: I use the navigation menu to go to other pages
 		// Click on the Home link in navigation
-		page.locator("nav .nav-link").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Home")).click();
+		page.locator("nav .nav-link")
+			.filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Home"))
+			.click();
 		waitForPageLoad();
 
 		// Then: I should be on the home page
 		assertTrue(page.url().endsWith("/") || page.url().contains("home"), "Should navigate to home page");
 
 		// When: I go back to veterinarians
-		page.locator("nav .nav-link").filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Veterinarians")).click();
+		page.locator("nav .nav-link")
+			.filter(new com.microsoft.playwright.Locator.FilterOptions().setHasText("Veterinarians"))
+			.click();
 		waitForPageLoad();
 
 		// Then: I should be back on veterinarians page
@@ -206,7 +210,7 @@ class VeterinariansAndErrorHandlingE2ETest extends BaseE2ETest {
 		// When: I try to navigate to various pages (testing general robustness)
 		navigateToPath("/owners/find");
 		waitForPageLoad();
-		
+
 		// Then: Navigation should work without errors
 		assertTrue(isElementVisible("h2"), "Should handle navigation without errors");
 
@@ -229,10 +233,10 @@ class VeterinariansAndErrorHandlingE2ETest extends BaseE2ETest {
 
 		// Then: The page should be responsive
 		assertTrue(veterinariansPage.isLoaded(), "Page should load on mobile viewport");
-		
+
 		// And: Content should be accessible
-		assertTrue(veterinariansPage.getPageHeading().contains("Veterinarians"), 
-				   "Content should be accessible on mobile");
+		assertTrue(veterinariansPage.getPageHeading().contains("Veterinarians"),
+				"Content should be accessible on mobile");
 
 		// When: I switch to tablet viewport
 		page.setViewportSize(768, 1024); // iPad size

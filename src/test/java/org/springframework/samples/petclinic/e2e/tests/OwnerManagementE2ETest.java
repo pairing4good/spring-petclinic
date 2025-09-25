@@ -29,15 +29,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Comprehensive E2E tests for Owner Management functionality.
- * 
- * Tests cover:
- * - Owner search functionality (find owners by last name)
- * - Owner creation with form validation
- * - Owner details viewing
- * - Owner editing functionality
- * - Form validation for required fields
- * - Special characters and edge cases in owner data
- * - Error handling and user feedback
+ *
+ * Tests cover: - Owner search functionality (find owners by last name) - Owner creation
+ * with form validation - Owner details viewing - Owner editing functionality - Form
+ * validation for required fields - Special characters and edge cases in owner data -
+ * Error handling and user feedback
  */
 @DisplayName("Owner Management E2E Tests")
 class OwnerManagementE2ETest extends BaseE2ETest {
@@ -96,8 +92,7 @@ class OwnerManagementE2ETest extends BaseE2ETest {
 		findOwnersPage.searchByLastName("NonExistentOwnerLastName12345");
 
 		// Then: I should see appropriate feedback (empty results or message)
-		assertFalse(findOwnersPage.hasSearchResults(),
-				"Should not show results for non-existent owner");
+		assertFalse(findOwnersPage.hasSearchResults(), "Should not show results for non-existent owner");
 	}
 
 	@Test
@@ -119,19 +114,18 @@ class OwnerManagementE2ETest extends BaseE2ETest {
 		// Then: The owner should be created successfully
 		// Wait a moment for any redirect to happen
 		waitForPageLoad();
-		
-		assertTrue(addOwnerPage.isRedirectedToOwnerDetails() || addOwnerPage.hasSuccessMessage() 
-				|| page.url().contains("/owners/"),
+
+		assertTrue(
+				addOwnerPage.isRedirectedToOwnerDetails() || addOwnerPage.hasSuccessMessage()
+						|| page.url().contains("/owners/"),
 				"Should be redirected to owner details, show success message, or be on owners page");
 
 		// And: If redirected to details, verify the information is correct
 		if (addOwnerPage.isRedirectedToOwnerDetails()) {
 			ownerDetailsPage = new OwnerDetailsPage(page);
 			assertTrue(ownerDetailsPage.isLoaded(), "Owner details page should be loaded");
-			assertTrue(ownerDetailsPage.getOwnerName().contains(firstName),
-					"Owner name should contain first name");
-			assertTrue(ownerDetailsPage.getOwnerName().contains(lastName),
-					"Owner name should contain last name");
+			assertTrue(ownerDetailsPage.getOwnerName().contains(firstName), "Owner name should contain first name");
+			assertTrue(ownerDetailsPage.getOwnerName().contains(lastName), "Owner name should contain last name");
 		}
 	}
 
@@ -167,8 +161,7 @@ class OwnerManagementE2ETest extends BaseE2ETest {
 
 		// Then: The owner should be created successfully or show appropriate handling
 		assertTrue(addOwnerPage.isRedirectedToOwnerDetails() || addOwnerPage.hasSuccessMessage()
-				|| addOwnerPage.hasValidationErrors(),
-				"Should handle special characters appropriately");
+				|| addOwnerPage.hasValidationErrors(), "Should handle special characters appropriately");
 	}
 
 	@Test
@@ -184,8 +177,7 @@ class OwnerManagementE2ETest extends BaseE2ETest {
 
 		// Then: The form should handle max length data appropriately
 		assertTrue(addOwnerPage.isRedirectedToOwnerDetails() || addOwnerPage.hasSuccessMessage()
-				|| addOwnerPage.hasValidationErrors(),
-				"Should handle maximum length data appropriately");
+				|| addOwnerPage.hasValidationErrors(), "Should handle maximum length data appropriately");
 	}
 
 	@Test
@@ -205,7 +197,8 @@ class OwnerManagementE2ETest extends BaseE2ETest {
 
 			// And: I should see owner information
 			assertFalse(ownerDetailsPage.getOwnerName().isEmpty(), "Owner name should be displayed");
-			// Address, city, telephone might be empty for some owners, so just check they return values
+			// Address, city, telephone might be empty for some owners, so just check they
+			// return values
 			String address = ownerDetailsPage.getOwnerAddress();
 			String city = ownerDetailsPage.getOwnerCity();
 			String telephone = ownerDetailsPage.getOwnerTelephone();
@@ -282,9 +275,8 @@ class OwnerManagementE2ETest extends BaseE2ETest {
 
 		// Then: I should see success feedback
 		waitForPageLoad();
-		assertTrue(addOwnerPage.isRedirectedToOwnerDetails() || addOwnerPage.hasSuccessMessage() 
-				|| page.url().contains("/owners/"),
-				"Should show success feedback after owner creation");
+		assertTrue(addOwnerPage.isRedirectedToOwnerDetails() || addOwnerPage.hasSuccessMessage()
+				|| page.url().contains("/owners/"), "Should show success feedback after owner creation");
 
 		// And: If redirected to details, check for success message there
 		if (addOwnerPage.isRedirectedToOwnerDetails()) {

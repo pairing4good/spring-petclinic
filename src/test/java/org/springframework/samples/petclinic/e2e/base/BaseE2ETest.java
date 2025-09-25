@@ -30,12 +30,10 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 
 /**
  * Base class for all E2E tests providing Playwright configuration and common setup.
- * 
- * This class provides:
- * - Playwright instance management
- * - Browser context setup with proper configurations
- * - Page isolation for each test
- * - Reusable methods for common actions
+ *
+ * This class provides: - Playwright instance management - Browser context setup with
+ * proper configurations - Page isolation for each test - Reusable methods for common
+ * actions
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class BaseE2ETest {
@@ -71,8 +69,9 @@ public abstract class BaseE2ETest {
 	@BeforeEach
 	void setUp() {
 		// Create new context for each test to ensure isolation
-		context = browser.newContext(new Browser.NewContextOptions()
-			.setViewportSize(1280, 720) // Standard desktop viewport
+		context = browser.newContext(new Browser.NewContextOptions().setViewportSize(1280, 720) // Standard
+																								// desktop
+																								// viewport
 			.setLocale("en-US"));
 
 		page = context.newPage();

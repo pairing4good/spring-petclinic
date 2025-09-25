@@ -20,11 +20,9 @@ import com.microsoft.playwright.Page;
 
 /**
  * Page Object Model for the Veterinarians page.
- * 
- * Provides methods to interact with elements on the veterinarians page including:
- * - Veterinarian information display
- * - Specialties display
- * - Table navigation and sorting
+ *
+ * Provides methods to interact with elements on the veterinarians page including: -
+ * Veterinarian information display - Specialties display - Table navigation and sorting
  */
 public class VeterinariansPage {
 
