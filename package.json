@@ -1,0 +1,23 @@
+{
+  "name": "spring-petclinic",
+  "version": "1.0.0",
+  "description": "[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/spring-projects/spring-petclinic) [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=7517918)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pairing4good/spring-petclinic.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pairing4good/spring-petclinic/issues"
+  },
+  "homepage": "https://github.com/pairing4good/spring-petclinic#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.55.1"
+  }
+}
