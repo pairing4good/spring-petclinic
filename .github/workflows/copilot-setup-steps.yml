@@ -1,0 +1,36 @@
+name: "Copilot Setup Steps"
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  # The job MUST be called `copilot-setup-steps` or it won't be picked up by Copilot
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # for actions/checkout
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm' # or 'yarn' if you use yarn
+      
+      - name: Install dependencies
+        run: npm ci # or yarn install --frozen-lockfile if you use yarn
+      
+      - name: Install Playwright browsers and dependencies
+        run: npx playwright install --with-deps
+        # Alternative: Install only specific browsers to save time
+        # run: npx playwright install chromium --with-deps
+      
+      # Optional: Verify installation
+      - name: Verify Playwright installation
+        run: npx playwright --version
