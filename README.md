@@ -82,6 +82,70 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## Running Tests
+
+### Unit and Integration Tests
+
+The project includes comprehensive unit and integration tests that can be run using either Maven or Gradle:
+
+**Maven:**
+```bash
+./mvnw test                    # Run all tests
+./mvnw verify                  # Run tests and additional verification
+```
+
+**Gradle:**
+```bash
+./gradlew test                 # Run all tests  
+./gradlew build                # Run tests and build the project
+```
+
+### End-to-End (E2E) Tests with Playwright
+
+The project includes comprehensive Playwright end-to-end tests that cover all major user flows:
+
+- **Homepage and Navigation** - Basic navigation and page loading
+- **Owner Management** - Create, search, view, and edit pet owners
+- **Pet Management** - Add and edit pets for owners
+- **Veterinarians** - View veterinarian listings
+
+**Running E2E Tests:**
+
+**Maven:**
+```bash
+# Run all E2E tests
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 ./mvnw test -Dtest="**/playwright/**/*Test"
+
+# Run specific test suites
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 ./mvnw test -Dtest=HomePageTest
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 ./mvnw test -Dtest=OwnerManagementTest
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 ./mvnw test -Dtest=PetManagementTest
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 ./mvnw test -Dtest=VeterinariansTest
+```
+
+**Gradle:**
+```bash
+# Run all E2E tests
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 ./gradlew test --tests "*playwright*"
+
+# Run specific test suites  
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 ./gradlew test --tests "*HomePageTest"
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 ./gradlew test --tests "*OwnerManagementTest"
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 ./gradlew test --tests "*PetManagementTest"
+PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 ./gradlew test --tests "*VeterinariansTest"
+```
+
+**Prerequisites for E2E Tests:**
+- The application must be running (E2E tests will start their own instance)
+- System chromium browser is used automatically
+- Tests run in headless mode by default
+
+**Troubleshooting E2E Tests:**
+- If tests timeout, ensure the application starts properly
+- Tests use system chromium browser (`/usr/bin/chromium-browser`)
+- Some tests may be disabled if they encounter technical issues - check test output for details
+- All tests use proper wait conditions and specific locators to avoid flaky behavior
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.

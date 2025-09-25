@@ -27,5 +27,15 @@ jobs:
           cache: maven
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Install system dependencies for Playwright
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
       - name: Build with Gradle
         run: ./gradlew build
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+      - name: Run E2E Tests with Gradle
+        run: ./gradlew test --tests "*playwright*"
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
