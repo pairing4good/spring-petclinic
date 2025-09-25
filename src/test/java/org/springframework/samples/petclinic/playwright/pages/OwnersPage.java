@@ -81,8 +81,8 @@ public class OwnersPage extends BasePage {
 		this.updateButton = page.locator("form button[type='submit']")
 			.filter(new Locator.FilterOptions().setHasText("Update Owner"));
 
-		// Validation elements
-		this.errorMessages = page.locator(".alert-danger, .has-error");
+		// Validation elements - use first error message for disambiguation
+		this.errorMessages = page.locator(".alert-danger, .has-error").first();
 	}
 
 	/**
