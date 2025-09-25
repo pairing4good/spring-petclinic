@@ -1,5 +1,6 @@
 plugins {
   id 'java'
+  id 'application'
   id 'checkstyle'
   id 'org.springframework.boot' version '3.5.0'
   id 'io.spring.dependency-management' version '1.1.7'
@@ -52,6 +53,8 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
+  // Playwright for E2E testing
+  testImplementation 'com.microsoft.playwright:playwright:1.50.0'
   checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
   checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
@@ -88,4 +91,11 @@ formatAotTest.enabled = false
 wrapper {
   gradleVersion = "8.14.3"
   distributionType = Wrapper.DistributionType.ALL
+}
+
+// Task to install Playwright browsers
+task installPlaywrightBrowsers(type: JavaExec) {
+  classpath = sourceSets.test.runtimeClasspath
+  mainClass = 'com.microsoft.playwright.CLI'
+  args = ['install', 'chromium']
 }
