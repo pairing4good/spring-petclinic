@@ -40,8 +40,11 @@ public abstract class BaseE2ETest {
 	protected int port;
 
 	protected static Playwright playwright;
+
 	protected static Browser browser;
+
 	protected BrowserContext context;
+
 	protected Page page;
 
 	@BeforeAll
@@ -49,29 +52,31 @@ public abstract class BaseE2ETest {
 		// Install browsers programmatically if not available
 		try {
 			playwright = Playwright.create();
-			
+
 			// Configure browser options for CI/headless environment
-			BrowserType.LaunchOptions options = new BrowserType.LaunchOptions()
-				.setHeadless(true)
-				.setArgs(List.of(
-					"--no-sandbox",
-					"--disable-dev-shm-usage",
-					"--disable-web-security",
-					"--disable-features=VizDisplayCompositor"
-				));
-			
+			BrowserType.LaunchOptions options = new BrowserType.LaunchOptions().setHeadless(true)
+				.setArgs(List.of("--no-sandbox", "--disable-dev-shm-usage", "--disable-web-security",
+						"--disable-features=VizDisplayCompositor"));
+
 			// Try different browsers in order of preference
 			try {
 				browser = playwright.chromium().launch(options);
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				try {
 					browser = playwright.firefox().launch(options);
-				} catch (Exception e2) {
+				}
+				catch (Exception e2) {
 					browser = playwright.webkit().launch(options);
 				}
 			}
-		} catch (Exception e) {
-			throw new RuntimeException("Failed to initialize Playwright. Please ensure browsers are installed.", e);
+		}
+		catch (Exception e) {
+			// Skip tests if browsers cannot be initialized (e.g., in CI environments
+			// without browser binaries)
+			org.junit.jupiter.api.Assumptions.assumeTrue(false,
+					"Skipping E2E tests: Playwright browsers not available in this environment. "
+							+ "Install browsers with: npx playwright install");
 		}
 	}
 
@@ -80,7 +85,7 @@ public abstract class BaseE2ETest {
 		// Create a new browser context for each test to ensure isolation
 		context = browser.newContext();
 		page = context.newPage();
-		
+
 		// Set default timeout for all operations
 		page.setDefaultTimeout(30000); // 30 seconds
 		page.setDefaultNavigationTimeout(30000); // 30 seconds

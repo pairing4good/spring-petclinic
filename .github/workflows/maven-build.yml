@@ -25,5 +25,7 @@ jobs:
           java-version: ${{matrix.java}}
           distribution: 'adopt'
           cache: maven
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
       - name: Build with Maven Wrapper
         run: ./mvnw -B verify

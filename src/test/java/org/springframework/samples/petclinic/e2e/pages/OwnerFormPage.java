@@ -101,9 +101,9 @@ public class OwnerFormPage extends BasePage {
 		return this;
 	}
 
-	public OwnerFormPage fillAllFields(String firstName, String lastName, String address, String city, String telephone) {
-		return fillFirstName(firstName)
-			.fillLastName(lastName)
+	public OwnerFormPage fillAllFields(String firstName, String lastName, String address, String city,
+			String telephone) {
+		return fillFirstName(firstName).fillLastName(lastName)
 			.fillAddress(address)
 			.fillCity(city)
 			.fillTelephone(telephone);

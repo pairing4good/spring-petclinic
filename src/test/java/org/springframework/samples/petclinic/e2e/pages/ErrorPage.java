@@ -34,8 +34,9 @@ public class ErrorPage extends BasePage {
 	}
 
 	private Locator errorMessage() {
-		return page.locator("p").filter(new Locator.FilterOptions()
-			.setHasText("Expected: controller used to showcase what happens when an exception is thrown"));
+		return page.locator("p")
+			.filter(new Locator.FilterOptions()
+				.setHasText("Expected: controller used to showcase what happens when an exception is thrown"));
 	}
 
 	private Locator errorImage() {
@@ -65,9 +66,8 @@ public class ErrorPage extends BasePage {
 
 	// Verification that this is the expected error page (not a generic 404)
 	public boolean isExpectedErrorPage() {
-		return isErrorHeadingVisible() && 
-			   isErrorMessageVisible() && 
-			   getErrorMessageText().contains("Expected: controller used to showcase");
+		return isErrorHeadingVisible() && isErrorMessageVisible()
+				&& getErrorMessageText().contains("Expected: controller used to showcase");
 	}
 
 }

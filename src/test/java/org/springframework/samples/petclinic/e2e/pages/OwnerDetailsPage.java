@@ -56,7 +56,10 @@ public class OwnerDetailsPage extends BasePage {
 	}
 
 	private Locator ownerAddress() {
-		return ownerTable().locator("tr").filter(new Locator.FilterOptions().setHasText("Address")).locator("td").nth(1);
+		return ownerTable().locator("tr")
+			.filter(new Locator.FilterOptions().setHasText("Address"))
+			.locator("td")
+			.nth(1);
 	}
 
 	private Locator ownerCity() {
@@ -64,7 +67,10 @@ public class OwnerDetailsPage extends BasePage {
 	}
 
 	private Locator ownerTelephone() {
-		return ownerTable().locator("tr").filter(new Locator.FilterOptions().setHasText("Telephone")).locator("td").nth(1);
+		return ownerTable().locator("tr")
+			.filter(new Locator.FilterOptions().setHasText("Telephone"))
+			.locator("td")
+			.nth(1);
 	}
 
 	// Pet-related elements

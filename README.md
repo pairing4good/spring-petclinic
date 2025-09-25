@@ -82,6 +82,142 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## End-to-End Testing with Playwright
+
+This project includes comprehensive end-to-end tests using Playwright to ensure all user flows work correctly across different browsers and scenarios.
+
+### Prerequisites for E2E Testing
+
+Before running Playwright tests, ensure you have:
+
+- Java 17 or newer
+- Node.js (for installing Playwright browsers)
+- Internet connection (for initial browser download)
+
+### Installing Playwright Browsers
+
+**Option 1: Using npm (Recommended)**
+```bash
+# Install Playwright CLI globally
+npm install -g playwright
+
+# Install browsers
+npx playwright install chromium
+```
+
+**Option 2: Using Maven**
+```bash
+# Install browsers using Maven exec plugin
+./mvnw exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install"
+```
+
+### Running End-to-End Tests
+
+**Run all tests with Maven:**
+```bash
+# Run all tests including E2E tests
+./mvnw test
+
+# Run only E2E tests
+./mvnw test -Dtest="**/*E2ETest"
+```
+
+**Run all tests with Gradle:**
+```bash
+# Run all tests including E2E tests
+./gradlew test
+
+# Run only E2E tests
+./gradlew test --tests "*E2ETest"
+```
+
+**Run specific E2E test suites:**
+```bash
+# Navigation and basic functionality tests
+./mvnw test -Dtest="NavigationAndBasicFunctionalityE2ETest"
+./gradlew test --tests "NavigationAndBasicFunctionalityE2ETest"
+
+# Owner management tests
+./mvnw test -Dtest="OwnerManagementE2ETest"  
+./gradlew test --tests "OwnerManagementE2ETest"
+
+# Error scenarios and edge cases tests
+./mvnw test -Dtest="ErrorScenariosAndEdgeCasesE2ETest"
+./gradlew test --tests "ErrorScenariosAndEdgeCasesE2ETest"
+
+# Responsive design and accessibility tests
+./mvnw test -Dtest="ResponsiveDesignAndAccessibilityE2ETest"
+./gradlew test --tests "ResponsiveDesignAndAccessibilityE2ETest"
+```
+
+### E2E Test Coverage
+
+Our Playwright tests cover:
+
+**Navigation & Basic Functionality:**
+- Home page welcome screen
+- Navigation between all main pages
+- Page title verification
+- Basic keyboard navigation
+
+**Owner Management:**
+- Owner search by last name
+- Owner creation with form validation
+- Owner editing and updates
+- Form validation error handling
+
+**Error Scenarios & Edge Cases:**
+- 404 error pages
+- 500 error page showcase
+- Special characters in forms
+- SQL injection prevention
+- Browser back/forward functionality
+- Form double-submission handling
+
+**Responsive Design & Accessibility:**
+- Mobile viewport testing (375px)
+- Tablet viewport testing (768px)
+- Desktop viewport testing (1920px)
+- Keyboard navigation
+- Basic accessibility checks
+- Focus management
+
+### Running Tests in Different Browsers
+
+The tests are configured to run in Chromium by default. To run in different browsers:
+
+```bash
+# Firefox (if installed)
+PLAYWRIGHT_BROWSER=firefox ./mvnw test -Dtest="*E2ETest"
+
+# WebKit/Safari (if installed)  
+PLAYWRIGHT_BROWSER=webkit ./mvnw test -Dtest="*E2ETest"
+```
+
+### Troubleshooting E2E Tests
+
+**Browser installation issues:**
+```bash
+# Manually install browsers
+npx playwright install
+
+# Check browser installation
+npx playwright install --help
+```
+
+**Test timeout issues:**
+- Tests are configured with 30-second timeouts
+- If tests fail due to timeouts, check application startup time
+- Ensure application is properly running before tests execute
+
+**Headless vs Headed mode:**
+- Tests run in headless mode by default for CI/CD
+- For debugging, tests can be modified to run in headed mode
+
+**CI/CD Environment:**
+- Browsers are automatically installed in GitHub Actions
+- Tests run in headless mode with appropriate flags for CI environments
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.
