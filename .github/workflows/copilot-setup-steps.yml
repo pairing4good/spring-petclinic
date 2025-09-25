@@ -21,10 +21,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          cache: 'npm' # or 'yarn' if you use yarn
+          # Remove cache if you don't have package-lock.json yet
       
-      - name: Install dependencies
-        run: npm ci # or yarn install --frozen-lockfile if you use yarn
+      - name: Install or update dependencies
+        run: |
+          # Install Playwright if not already in package.json
+          if [ ! -f "package.json" ]; then
+            npm init -y
+          fi
+          
+          # Install Playwright test package if not present
+          if ! npm list @playwright/test > /dev/null 2>&1; then
+            npm install --save-dev @playwright/test
+          fi
+          
+          # Install all dependencies
+          npm install
       
       - name: Install Playwright browsers and dependencies
         run: npx playwright install --with-deps
