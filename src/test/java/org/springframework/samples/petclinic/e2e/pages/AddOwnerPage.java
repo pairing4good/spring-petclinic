@@ -205,8 +205,14 @@ public class AddOwnerPage {
 	 */
 	public void fillFormWithMaxLengthInputs() {
 		String longName = "A".repeat(50); // Assuming reasonable max length
-		String longAddress = "1234 Very Long Street Name That Goes On And On And On".substring(0, 80);
-		String longCity = "Very Long City Name That Tests Maximum Length".substring(0, 80);
+		String longAddress = "1234 Very Long Street Name That Goes On And On And On";
+		if (longAddress.length() > 80) {
+			longAddress = longAddress.substring(0, 80);
+		}
+		String longCity = "Very Long City Name That Tests Maximum Length";
+		if (longCity.length() > 80) {
+			longCity = longCity.substring(0, 80);
+		}
 		fillOwnerForm(longName, longName, longAddress, longCity, "555-123-4567");
 	}
 
@@ -222,7 +228,14 @@ public class AddOwnerPage {
 	 * Check if redirected to owner details page after successful creation.
 	 */
 	public boolean isRedirectedToOwnerDetails() {
-		return page.url().matches(".*\\/owners\\/\\d+$");
+		// Wait a bit for potential redirect
+		try {
+			page.waitForURL("**/owners/**", new Page.WaitForURLOptions().setTimeout(5000));
+			return page.url().matches(".*\\/owners\\/\\d+$");
+		}
+		catch (Exception e) {
+			return page.url().matches(".*\\/owners\\/\\d+$");
+		}
 	}
 
 }
