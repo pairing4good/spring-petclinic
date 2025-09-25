@@ -25,5 +25,7 @@ jobs:
           java-version: ${{matrix.java}}
           distribution: 'adopt'
           cache: maven
+      - name: Install Playwright browsers
+        run: ./mvnw exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install chromium"
       - name: Build with Maven Wrapper
         run: ./mvnw -B verify

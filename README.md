@@ -153,6 +153,113 @@ Here is a list of them:
 | Bean Validation / Hibernate Validator: simplify Maven dependencies and backward compatibility |[HV-790](https://hibernate.atlassian.net/browse/HV-790) and [HV-792](https://hibernate.atlassian.net/browse/HV-792) |
 | Spring Data: provide more flexibility when working with JPQL queries | [DATAJPA-292](https://github.com/spring-projects/spring-data-jpa/issues/704) |
 
+## Testing
+
+Spring Petclinic includes comprehensive testing coverage with unit tests, integration tests, and end-to-end tests.
+
+### Running All Tests
+
+**Using Maven:**
+```bash
+./mvnw test
+```
+
+**Using Gradle:**
+```bash
+./gradlew test
+```
+
+### Running Specific Test Types
+
+**Unit and Integration Tests Only:**
+```bash
+# Maven
+./mvnw test -Dtest="!**/*E2ETest"
+
+# Gradle  
+./gradlew test --tests "*" --exclude-tests "**/*E2ETest"
+```
+
+**End-to-End Tests Only:**
+```bash
+# Maven
+./mvnw test -Dtest="**/*E2ETest"
+
+# Gradle
+./gradlew test --tests "**/*E2ETest"
+```
+
+### End-to-End Testing with Playwright
+
+The application includes comprehensive Playwright end-to-end tests that cover:
+
+- **Navigation and Homepage**: Homepage functionality, menu navigation, and page routing
+- **Owner Management**: Owner search, creation, editing, and details viewing
+- **Veterinarians**: Veterinarian listing, pagination, and specialties display
+- **Error Handling**: Error pages, form validation, and edge cases
+- **Responsive Design**: Mobile, tablet, and desktop viewport testing
+
+**Prerequisites for E2E Tests:**
+- Playwright browsers must be installed (automatically handled in CI/CD)
+- For local development, browsers are installed automatically when running tests
+
+**Running E2E Tests Locally:**
+```bash
+# Maven
+./mvnw test -Dtest="**/*E2ETest"
+
+# Gradle
+./gradlew test --tests "**/*E2ETest"
+```
+
+**Running E2E Tests in Different Browsers:**
+```bash
+# The tests run in headless Chromium by default
+# To run with visible browser (for debugging):
+./mvnw test -Dtest="**/*E2ETest" -Dplaywright.headless=false
+```
+
+**E2E Test Structure:**
+- `BaseE2ETest`: Base class with browser setup and common utilities
+- `pages/`: Page Object Model classes for each page
+- `tests/`: Comprehensive test classes organized by functionality
+
+### Test Reports
+
+**Maven Surefire Reports:**
+- Location: `target/surefire-reports/`
+- View: Open `target/surefire-reports/index.html` in browser
+
+**Gradle Test Reports:**
+- Location: `build/reports/tests/test/`
+- View: Open `build/reports/tests/test/index.html` in browser
+
+### Troubleshooting Tests
+
+**Playwright Browser Installation Issues:**
+```bash
+# Manual browser installation (if needed)
+./mvnw exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install chromium"
+
+# Or for Gradle
+./gradlew --quiet exec -PmainClass=com.microsoft.playwright.CLI -Pargs="install chromium"
+```
+
+**Common Issues:**
+- **Tests timeout**: Increase timeout in test configuration or check if application is starting correctly
+- **Browser not found**: Run browser installation command above
+- **Port conflicts**: Tests use random ports, but ensure no other applications are using default ports
+- **Test isolation**: Each E2E test runs in its own browser context for isolation
+
+**Debug Mode:**
+```bash
+# Run with debug output
+./mvnw test -Dtest="NavigationAndHomepageE2ETest" -X
+
+# Run single test method
+./mvnw test -Dtest="NavigationAndHomepageE2ETest#asAUser_IWantToViewTheHomepage_SoThatICanSeeTheWelcomeMessage"
+```
+
 ## Contributing
 
 The [issue tracker](https://github.com/spring-projects/spring-petclinic/issues) is the preferred channel for bug reports, feature requests and submitting pull requests.
