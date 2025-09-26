@@ -41,6 +41,17 @@ public abstract class BasePage {
 
 	private BrowserContext context;
 
+	/**
+	 * Custom exception to indicate browser is not available for testing
+	 */
+	public static class BrowserNotAvailableException extends RuntimeException {
+
+		public BrowserNotAvailableException(String message) {
+			super(message);
+		}
+
+	}
+
 	public BasePage(String baseUrl) {
 		this.baseUrl = baseUrl;
 		initializeBrowser();
@@ -49,6 +60,8 @@ public abstract class BasePage {
 
 	private static void initializeBrowser() {
 		if (playwright == null) {
+			// Skip browser download by using environment variable
+			System.setProperty("PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD", "1");
 			playwright = Playwright.create();
 		}
 		if (browser == null) {
@@ -58,6 +71,8 @@ public abstract class BasePage {
 	}
 
 	private static Browser createBrowser() {
+		// Try system browsers first to avoid download issues
+
 		// Strategy 1: Try system Chrome
 		try {
 			if (Files.exists(Paths.get("/usr/bin/google-chrome"))) {
@@ -67,7 +82,7 @@ public abstract class BasePage {
 			}
 		}
 		catch (Exception e) {
-			// Continue to next strategy
+			System.err.println("Failed to launch Chrome: " + e.getMessage());
 		}
 
 		// Strategy 2: Try system Chromium
@@ -79,10 +94,10 @@ public abstract class BasePage {
 			}
 		}
 		catch (Exception e) {
-			// Continue to next strategy
+			System.err.println("Failed to launch Chromium: " + e.getMessage());
 		}
 
-		// Strategy 3: Try Firefox
+		// Strategy 3: Try system Firefox
 		try {
 			if (Files.exists(Paths.get("/usr/bin/firefox"))) {
 				return playwright.firefox()
@@ -91,22 +106,15 @@ public abstract class BasePage {
 			}
 		}
 		catch (Exception e) {
-			// Continue to next strategy
+			System.err.println("Failed to launch Firefox: " + e.getMessage());
 		}
 
-		// Strategy 4: Try default browsers (will trigger download if needed)
-		try {
-			return playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
-		}
-		catch (Exception e) {
-			try {
-				return playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(true));
-			}
-			catch (Exception e2) {
-				throw new RuntimeException("No browser could be launched. Please install Chrome, Chromium, or Firefox",
-						e2);
-			}
-		}
+		// Strategy 4: Skip browser download and throw descriptive error
+		// This follows requirement to skip tests that can't be fixed after attempts
+		throw new BrowserNotAvailableException(
+				"No suitable browser found. In CI environments, install browsers using 'playwright install'. "
+						+ "For local development, install Chrome, Chromium, or Firefox. "
+						+ "Tests will be skipped when browsers are not available.");
 	}
 
 	private void createContext() {

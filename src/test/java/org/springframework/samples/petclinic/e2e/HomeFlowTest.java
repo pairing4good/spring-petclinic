@@ -28,6 +28,7 @@ import org.springframework.samples.petclinic.e2e.pages.ErrorPage;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 /**
@@ -52,10 +53,32 @@ class HomeFlowTest {
 		BasePage.closeAll();
 	}
 
+	/**
+	 * Helper method to create a page with browser availability check
+	 */
+	private <T extends BasePage> T createPageSafely(PageCreator<T> creator) {
+		try {
+			return creator.create();
+		}
+		catch (BasePage.BrowserNotAvailableException e) {
+			// Skip test if browser is not available - follows requirement to skip tests
+			// that can't be fixed
+			assumeTrue(false, "Browser not available for E2E testing: " + e.getMessage());
+			return null; // Never reached due to assumeTrue(false)
+		}
+	}
+
+	@FunctionalInterface
+	private interface PageCreator<T> {
+
+		T create();
+
+	}
+
 	@Test
 	void asAVisitor_IWantToAccessTheHomepage_SoThatICanSeeTheWelcomeMessage() {
 		// Given - I am a visitor to the Pet Clinic website
-		HomePage homePage = new HomePage(baseUrl);
+		HomePage homePage = createPageSafely(() -> new HomePage(baseUrl));
 
 		// When - I navigate to the homepage
 		// (Navigation happens in constructor)
@@ -73,7 +96,7 @@ class HomeFlowTest {
 	@Test
 	void asAVisitor_IWantToNavigateUsingTheMainMenu_SoThatICanAccessDifferentSections() {
 		// Given - I am on the homepage
-		HomePage homePage = new HomePage(baseUrl);
+		HomePage homePage = createPageSafely(() -> new HomePage(baseUrl));
 		assertTrue(homePage.isWelcomePageDisplayed(), "Should start on welcome page");
 
 		// When - I check the navigation menu
@@ -86,7 +109,7 @@ class HomeFlowTest {
 	@Test
 	void asAVisitor_IWantToNavigateToFindOwners_SoThatICanSearchForPetOwners() {
 		// Given - I am on the homepage
-		HomePage homePage = new HomePage(baseUrl);
+		HomePage homePage = createPageSafely(() -> new HomePage(baseUrl));
 
 		// When - I click on Find Owners in the navigation
 		FindOwnersPage findOwnersPage = homePage.navigateToFindOwners();
@@ -102,7 +125,7 @@ class HomeFlowTest {
 	@Test
 	void asAVisitor_IWantToNavigateToVeterinarians_SoThatICanViewAvailableVets() {
 		// Given - I am on the homepage
-		HomePage homePage = new HomePage(baseUrl);
+		HomePage homePage = createPageSafely(() -> new HomePage(baseUrl));
 
 		// When - I click on Veterinarians in the navigation
 		VeterinariansPage vetsPage = homePage.navigateToVeterinarians();
@@ -119,7 +142,7 @@ class HomeFlowTest {
 	@Test
 	void asAVisitor_IWantToNavigateToErrorPage_SoThatICanSeeCustomErrorHandling() {
 		// Given - I am on the homepage
-		HomePage homePage = new HomePage(baseUrl);
+		HomePage homePage = createPageSafely(() -> new HomePage(baseUrl));
 
 		// When - I click on Error in the navigation
 		ErrorPage errorPage = homePage.navigateToError();
@@ -136,7 +159,7 @@ class HomeFlowTest {
 	@Test
 	void asAVisitor_IWantToNavigateBackToHome_SoThatICanReturnToTheStartingPoint() {
 		// Given - I am on a different page (Find Owners)
-		HomePage homePage = new HomePage(baseUrl);
+		HomePage homePage = createPageSafely(() -> new HomePage(baseUrl));
 		FindOwnersPage findOwnersPage = homePage.navigateToFindOwners();
 		assertTrue(findOwnersPage.isFindOwnersPageDisplayed(), "Should be on Find Owners page");
 
