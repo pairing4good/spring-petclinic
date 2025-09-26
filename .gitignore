@@ -49,3 +49,12 @@ out/
 _site/
 *.css
 !petclinic.css
+
+# Node modules (not needed for Java Playwright)
+node_modules/
+package-lock.json
+package.json
+
+# Playwright test results
+playwright-report/
+test-results/

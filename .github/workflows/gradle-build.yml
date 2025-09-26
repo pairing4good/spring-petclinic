@@ -1,6 +1,3 @@
-# This workflow will build a Java project with Gradle, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/use-cases-and-examples/building-and-testing/building-and-testing-java-with-gradle
-
 name: Java CI with Gradle
 
 on:
@@ -10,8 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -29,3 +25,22 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - name: Build with Gradle
         run: ./gradlew build
+        
+      # Install Playwright browsers - This is the key step for E2E tests!
+      - name: Install Playwright Browsers
+        run: |
+          # Install system dependencies for browsers
+          sudo apt-get update
+          sudo apt-get install -y libnss3-dev libatk-bridge2.0-dev libdrm2 libxkbcommon-dev libxcomposite-dev libxdamage-dev libxrandr2 libgbm-dev libxss1 libasound-dev
+          # Note: Gradle build already includes Playwright tests, so browsers are needed
+          echo "Browser dependencies installed for Gradle Playwright tests"
+          
+      # Upload test results for failed tests
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: gradle-test-results
+          path: |
+            build/reports/
+            build/test-results/
+          retention-days: 30

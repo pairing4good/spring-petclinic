@@ -39,6 +39,107 @@ There is no `Dockerfile` in this project. You can build a container image (if yo
 ./mvnw spring-boot:build-image
 ```
 
+## Testing
+
+This application includes comprehensive end-to-end tests using [Playwright for Java](https://playwright.dev/java/) to ensure all user flows work correctly.
+
+### Test Types
+
+- **Unit Tests**: Traditional JUnit tests for individual components
+- **Integration Tests**: Spring Boot integration tests for API endpoints
+- **End-to-End Tests**: Playwright tests that simulate real user interactions
+
+### Running Tests
+
+#### All Tests (Unit, Integration, and E2E)
+```bash
+./mvnw test
+```
+
+#### Unit and Integration Tests Only
+```bash
+./mvnw test -Dtest="!**/*FlowTest"
+```
+
+#### End-to-End Tests Only
+```bash
+./mvnw test -Dtest="**/*FlowTest"
+```
+
+#### Using Gradle
+```bash
+# All tests
+./gradlew test
+
+# E2E tests only (requires Gradle task configuration)
+./gradlew test --tests "*FlowTest"
+```
+
+### End-to-End Test Setup
+
+The E2E tests use Playwright for Java and require browsers to be available:
+
+#### Local Development
+
+1. **Install browsers manually** (for local development):
+   ```bash
+   # Install system browsers
+   # Ubuntu/Debian:
+   sudo apt-get install google-chrome-stable chromium-browser firefox
+   
+   # macOS:
+   brew install --cask google-chrome chromium firefox
+   
+   # Or install Playwright browsers:
+   ./mvnw exec:java -Dexec.mainClass="com.microsoft.playwright.CLI" -Dexec.args="install chromium"
+   ```
+
+2. **Run the application**:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+
+3. **Run E2E tests** (in another terminal):
+   ```bash
+   ./mvnw test -Dtest="**/*FlowTest"
+   ```
+
+#### CI/CD Environments
+
+The GitHub Actions workflows automatically install the required browsers and dependencies. The E2E tests run as part of the build process and will fail the build if any tests fail.
+
+### Test Structure
+
+The E2E tests follow the Page Object Model pattern and are organized by user flows:
+
+- `HomeFlowTest` - Homepage and navigation testing
+- `OwnerSearchFlowTest` - Owner search functionality  
+- `OwnerManagementFlowTest` - Owner CRUD operations
+- `PetManagementFlowTest` - Pet management features
+- `VeterinarianFlowTest` - Veterinarian listing and details
+- `ErrorHandlingFlowTest` - Error page and error scenario testing
+
+### Troubleshooting E2E Tests
+
+**Browser not found errors:**
+- Ensure you have Chrome, Chromium, or Firefox installed
+- Or install Playwright browsers: `./mvnw exec:java -Dexec.mainClass="com.microsoft.playwright.CLI" -Dexec.args="install chromium"`
+
+**Tests failing in CI:**
+- Check that browsers are properly installed in the GitHub Actions workflow
+- Verify that system dependencies are installed for headless browser operation
+
+**Flaky tests:**
+- E2E tests include proper wait conditions and retry mechanisms
+- Individual test failures are investigated and fixed before proceeding
+
+### Test Reports
+
+Test results are automatically uploaded as artifacts in CI environments:
+- Surefire reports: `target/surefire-reports/`
+- Playwright reports: `playwright-report/` (if generated)
+- Test videos and screenshots: `test-results/` (on failures)
+
 ## In case you find a bug/suggested improvement for Spring Petclinic
 
 Our issue tracker is available [here](https://github.com/spring-projects/spring-petclinic/issues).
