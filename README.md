@@ -78,9 +78,103 @@ or
 docker compose up postgres
 ```
 
-## Test Applications
+## Testing
+
+### Unit and Integration Tests
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
+
+### End-to-End Testing with Playwright
+
+This project includes comprehensive end-to-end tests using [Playwright](https://playwright.dev/java/) that cover all user flows, error scenarios, and edge cases.
+
+#### Running E2E Tests Locally
+
+**Prerequisites:**
+- Java 17 or newer
+- Application dependencies installed
+
+**Using Maven:**
+```bash
+# Install dependencies (including Playwright)
+./mvnw compile
+
+# Run all tests (includes E2E tests)
+./mvnw test
+
+# Run only E2E tests
+./mvnw test -Dtest="*E2ETest"
+
+# Run specific E2E test class
+./mvnw test -Dtest=WelcomePageE2ETest
+```
+
+**Using Gradle:**
+```bash
+# Install dependencies
+./gradlew build
+
+# Run all tests (includes E2E tests)
+./gradlew test
+
+# Run only E2E tests
+./gradlew test --tests "*E2ETest"
+
+# Run specific E2E test class
+./gradlew test --tests "WelcomePageE2ETest"
+```
+
+#### E2E Test Structure
+
+The E2E tests follow the Page Object Model pattern for maintainability:
+
+- **Base Classes:**
+  - `BaseE2ETest` - Common test setup and Playwright configuration
+  - `BasePage` - Common page functionality
+
+- **Page Objects:** (`src/test/java/org/springframework/samples/petclinic/e2e/pages/`)
+  - `WelcomePage` - Homepage interactions
+  - `FindOwnersPage` - Owner search functionality
+  - `OwnerDetailsPage` - Owner information display
+  - `OwnerFormPage` - Owner create/edit forms
+  - `VeterinariansPage` - Veterinarians listing
+  - And more...
+
+- **Test Classes:** (`src/test/java/org/springframework/samples/petclinic/e2e/`)
+  - `WelcomePageE2ETest` - Homepage and navigation testing
+  - `OwnerManagementE2ETest` - Owner CRUD operations
+  - Additional test classes for comprehensive coverage
+
+#### E2E Test Coverage
+
+The E2E test suite covers:
+
+- ✅ **User Navigation**: Homepage, navigation links, routing
+- ✅ **Owner Management**: Create, search, view, edit owners
+- ✅ **Pet Management**: Add pets to owners, edit pet details
+- ✅ **Visit Management**: Schedule visits for pets
+- ✅ **Veterinary Information**: View veterinarians and specialties
+- ✅ **Form Validation**: Error handling and validation messages
+- ✅ **Error Pages**: 404 pages, error states
+- ✅ **Responsive Design**: Different screen sizes and viewports
+- ✅ **Cross-browser Support**: Chrome, Firefox, Safari (via CI/CD)
+
+#### Troubleshooting E2E Tests
+
+**Common Issues:**
+
+1. **Port already in use**: Make sure no other instances of the application are running on port 8080
+2. **Test timeouts**: Tests include proper wait strategies, but network issues might cause timeouts
+3. **Browser dependencies**: Playwright will automatically download browser dependencies on first run
+
+**Debug Mode:**
+```bash
+# Run with debug output
+./mvnw test -Dtest=WelcomePageE2ETest -X
+
+# Check test reports
+ls target/surefire-reports/
+```
 
 ## Compiling the CSS
 
