@@ -9,13 +9,61 @@ Implement a complete suite of Playwright end-to-end tests that cover all user fl
 **So that** we can confidently deploy changes knowing all user flows work correctly and catch regressions early
 
 ## Requirements
-### 1. Test Implementation
+### 1. Application Analysis and Flow Discovery (MANDATORY FIRST STEP)
+- [ ] **MANDATORY: Application Architecture Analysis (BEFORE Test Discovery)**:
+  - **Web Applications**: Examine routes, controllers, templates, navigation menus, sitemap
+  - **Mobile Apps**: Analyze screens, navigation flows, user actions, app structure
+  - **Desktop Apps**: Map all windows, dialogs, menus, and user interactions
+  - **APIs**: Identify all user-accessible endpoints and operations
+- [ ] **Document the application's primary entities and their relationships** (Users, Products, Orders, etc.)
+- [ ] **Identify all user roles/personas and their specific capabilities**
+- [ ] **List all major features/modules** (Authentication, Shopping Cart, Admin Panel, etc.)
+
+### 1.1 MANDATORY: User Flow Discovery and Documentation
+- [ ] **FIRST: Before writing ANY tests, create a comprehensive list of ALL user flows**
+- [ ] **Analyze the application systematically**:
+  - Navigate through the entire application manually (every page, every link)
+  - Document every page, route, and user interaction
+  - Identify all navigation menu items and their destinations
+  - Map all forms, buttons, and interactive elements
+  - List all CRUD operations available to users
+  - Document all error states accessible through normal user interaction
+  - Check for modal dialogs, dropdown menus, and hidden functionality
+- [ ] **Create a User Flow Inventory** (markdown table/list format):
+  ```markdown
+  ## USER FLOW INVENTORY
+  | Flow Name | Description | Entry Points | Key Actions | Test File Name | Status |
+  |-----------|-------------|--------------|-------------|----------------|---------|
+  | Homepage Navigation | Landing page and main navigation | / | View page, click nav links | HomepageE2ETest | ⏳ Pending |
+  | User Authentication | Login/logout/register | /login, nav menu | Login, register, logout | AuthenticationE2ETest | ⏳ Pending |
+  | Product Catalog | Browse and search products | /products, nav menu | View products, search, filter | ProductCatalogE2ETest | ⏳ Pending |
+  | [Continue for ALL flows...] | | | | | |
+  ```
+- [ ] **MANDATORY: Self-validate that ALL flows are identified by performing systematic verification checks**:
+  - Re-navigate through the entire application a second time to catch any missed flows
+  - Compare discovered flows against application navigation menus, routes, and controllers
+  - Verify every clickable element/button has a corresponding flow documented
+  - Check that all forms, CRUD operations, and user interactions are captured
+- [ ] **Cross-reference with application source code (routes/controllers/components) to ensure no flows are missed**
+- [ ] **Validate inventory completeness by performing a second full navigation through the application**
+
+### 1.2 Test Implementation
 - [ ] **FIRST: Create a simple temporary E2E test** to verify Playwright configuration and basic functionality (e.g., navigate to homepage, verify page title)
 - [ ] **Run and fix this temporary test** using the same 10-attempt process described in Section 8
 - [ ] **MANDATORY: Once temporary test passes and configuration is verified, DELETE the temporary test**
-- [ ] **Then proceed with creating all persona flow tests** as described below
-- [ ] Write comprehensive Playwright tests covering ALL user flows in the application
-- [ ] **Create a separate test file/class for each user flow** to ensure comprehensive coverage per persona/customer type
+- [ ] **Then proceed with systematic test file creation as described below**
+
+### 1.3 MANDATORY: Systematic Test File Creation and Validation
+- [ ] **For EACH user flow identified in the Flow Discovery inventory above:**
+  - [ ] Create a dedicated test file/class named `[FlowName]E2ETest` (following project naming conventions)
+  - [ ] Write ALL test scenarios for that specific flow (positive and negative cases)
+  - [ ] **MANDATORY: Immediately after writing each complete test file, run the entire test file to verify ALL tests pass**
+  - [ ] **If any tests fail, use the 10-attempt process to fix them before proceeding to the next flow**
+  - [ ] Mark the flow as ✅ COMPLETED in the inventory table only after all tests pass
+  - [ ] Update the inventory with the actual number of tests written
+- [ ] **CRITICAL: Before marking this task complete, verify EVERY flow in the inventory has a corresponding ✅ COMPLETED test file**
+- [ ] **If any flow shows ⏳ Pending, ❌ Failed, ⚠️ Error, or any status other than ✅ COMPLETED or ⏩ SKIPPED the entire task is NOT complete**
+- [ ] **MANDATORY: Create a final coverage validation report** (see Section 1.4)
 - [ ] Cover ALL accessible error pages and error states that can be triggered through web navigation (404 pages, form validation errors, authentication errors, authorization errors, etc.)
 - [ ] Cover ALL edge cases (empty states, maximum inputs, special characters, etc.)
 - [ ] Focus on testing error scenarios that are accessible through the web interface - do not attempt to test server-side failures that cannot be simulated through normal web navigation
@@ -35,6 +83,37 @@ Implement a complete suite of Playwright end-to-end tests that cover all user fl
   - Use parent-child relationships: `page.locator('[data-testid="checkout-form"]').locator('button[type="submit"]')`
   - Use `getByRole()` with accessible names: `page.getByRole('button', { name: 'Add to Cart' })`
 - [ ] **Add descriptive comments** for complex locators explaining why specific disambiguation was chosen
+
+### 1.4 MANDATORY: Coverage Validation Report (Before Final Completion)
+- [ ] **MANDATORY: Create a comprehensive coverage report showing ALL flows and their test status**:
+  ```markdown
+  # FINAL FLOW COVERAGE REPORT
+  ✅ Homepage/Welcome Flow - WelcomePageE2ETest.java (5 tests) - ALL TESTS PASS
+  ✅ Owner Management Flow - OwnerManagementE2ETest.java (7 tests) - ALL TESTS PASS
+  ✅ Veterinarians Flow - VeterinariansE2ETest.java (6 tests) - ALL TESTS PASS
+  ✅ Pet Management Flow - PetManagementE2ETest.java (X tests) - ALL TESTS PASS
+  ✅ Visit Management Flow - VisitManagementE2ETest.java (X tests) - ALL TESTS PASS
+  ✅ Error Handling Flow - ErrorHandlingE2ETest.java (X tests) - ALL TESTS PASS
+
+  COVERAGE SUMMARY:
+  - Total Flows Identified: X
+  - Total Flows with Complete Tests: X
+  - Coverage Percentage: 100% (REQUIRED)
+  - Total Test Files Created: X
+  - Total Individual Tests Written: XX
+  - All Tests Passing: ✅ YES (REQUIRED)
+  ```
+- [ ] **If ANY flow shows ❌ FAILED, ⏳ PENDING, or <100% coverage, the task is incomplete**
+- [ ] **Agent must explicitly confirm: "I have tested 100% of all identified user flows"**
+
+### 1.5 MANDATORY: Final Self-Assessment (Required Before Completion)
+Answer these questions explicitly in documentation:
+- [ ] **"Have I manually navigated through the ENTIRE application to discover all flows?"** (Yes/No + evidence)
+- [ ] **"Does every navigation menu item/button have corresponding test coverage?"** (Yes/No + list)
+- [ ] **"Have I tested every form and CRUD operation accessible to users?"** (Yes/No + list)
+- [ ] **"Are there any user-accessible pages/features I haven't tested?"** (None/List any)
+- [ ] **"Would a new developer be able to verify my coverage is complete from my documentation?"** (Yes/No)
+- [ ] **"Can I demonstrate that my Flow Discovery phase was thorough and systematic?"** (Yes/No + evidence)
 
 ### 2. Test Coverage Areas (Must Include All)
 - [ ] User authentication flows (login, logout, registration, password reset)
@@ -246,23 +325,32 @@ Implement a complete suite of Playwright end-to-end tests that cover all user fl
 - [ ] **All commands from all workflows must pass 3 consecutive times each before the issue can be marked complete**
 - [ ] **MANDATORY AND CRITICAL - ALL BUILD COMMANDS MUST RUN SUCCESSFULLY BEFORE THE SESSION IS COMPLETE AND THE PR IS READY FOR REVIEW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: Running the commands from all workflows validates that the entire build process works correctly, not just the tests - formatting, compilation, testing, and any other build steps must all succeed**
 
+### 11. Checkpoint Validations (Throughout Implementation)
+- [ ] **After Flow Discovery Phase**: Validate inventory completeness by performing a second full navigation through the application
+- [ ] **After Writing Each Test File**: Update flow inventory with ✅ COMPLETED status and actual test count
+- [ ] **At 50% Test Completion**: Review remaining flows and ensure systematic progress is being made
+- [ ] **Before Technical Integration Steps (CI/CD, README)**: Verify ALL flows show ✅ COMPLETED status in inventory
+- [ ] **Before Final Validation**: Ensure flow inventory shows 100% coverage with all ✅ marks and complete coverage report
+
 ## Acceptance Criteria
 
 ### Critical Success Requirements
-1. **Complete Test Coverage**: Every user flow, accessible error scenario, and edge case must have corresponding Playwright tests
-2. **All Tests Written**: No TODO comments or placeholder tests - all functionality must be tested
-3. **MANDATORY Page Object Model**: Proper Page Object Model implementation is REQUIRED - this is not optional
-4. **Separate Test Files per Flow**: Each user flow must have its own dedicated test file/class for comprehensive coverage
-4. **Element Disambiguation**: All Playwright locators must be specific and unambiguous, with proper strategies to handle elements that could match multiple results
-5. **CRITICAL - Individual Test Validation**: The agent MUST run each test individually after writing it and fix any failures (up to 10 attempts per test) before proceeding. Tests that cannot be fixed after 10 attempts must be skipped with detailed comments.
-6. **MANDATORY - Test File/Class Validation**: The agent MUST run each complete test file/class immediately after writing it to verify ALL tests in that file pass before proceeding to write the next test file/class.
-7. **Agent Final Validation**: The agent must identify and run ALL commands found in EACH GitHub Actions workflow 3 consecutive times (extract all commands from each workflow file and run them locally, do NOT attempt to execute the workflows themselves). This includes build commands, test commands, and any other commands that could cause build failure. If there are multiple workflows, validate each workflow's commands separately. **IMPORTANT**: This is ONLY for the agent's final verification - do NOT implement this as part of the test suite, build scripts, or GitHub Actions
-6. **100% Pass Rate**: All tests must pass in all 3 validation runs before considering the issue complete
-7. **Flaky Test Resolution**: If any tests fail during the 3-run validation, the agent must fix the flaky tests and then re-run the 3-time validation process until all tests pass consistently
-8. **CRITICAL - No Failing Tests**: Every individual test must either pass or be explicitly skipped after 10 fix attempts - no tests should remain in failing state
-8. **Red CI/CD on Failure**: GitHub Actions workflows must fail (show red status) immediately when any Playwright test fails
-9. **Green CI/CD on Success**: All GitHub Actions workflows must be green only when all tests pass
-10. **Build Integrity**: All existing build processes must continue to work without issues
+1. **MANDATORY Flow Discovery**: Complete User Flow Inventory must be created showing ALL user flows identified through systematic application analysis
+2. **Complete Test Coverage**: 100% of ALL user flows identified in the Flow Discovery phase must have corresponding Playwright tests - NO EXCEPTIONS
+3. **All Tests Written**: No TODO comments or placeholder tests - all functionality must be tested
+4. **MANDATORY Page Object Model**: Proper Page Object Model implementation is REQUIRED - this is not optional
+5. **Separate Test Files per Flow**: Each user flow must have its own dedicated test file/class for comprehensive coverage
+6. **Element Disambiguation**: All Playwright locators must be specific and unambiguous, with proper strategies to handle elements that could match multiple results
+7. **CRITICAL - Systematic Test File Validation**: For EACH test file created, agent MUST run the entire test file immediately after writing it and fix any failures (up to 10 attempts per test file) before proceeding to the next flow
+8. **MANDATORY Coverage Validation Report**: Final report must show 100% coverage with ALL flows marked as ✅ COMPLETED with passing tests
+9. **CRITICAL - Self-Assessment Questions**: All final self-assessment questions must be answered explicitly with evidence demonstrating thorough coverage
+10. **Agent Final Validation**: The agent must identify and run ALL commands found in EACH GitHub Actions workflow 3 consecutive times (extract all commands from each workflow file and run them locally, do NOT attempt to execute the workflows themselves). This includes build commands, test commands, and any other commands that could cause build failure. If there are multiple workflows, validate each workflow's commands separately. **IMPORTANT**: This is ONLY for the agent's final verification - do NOT implement this as part of the test suite, build scripts, or GitHub Actions
+11. **100% Pass Rate**: All tests must pass in all 3 validation runs before considering the issue complete
+12. **Flaky Test Resolution**: If any tests fail during the 3-run validation, the agent must fix the flaky tests and then re-run the 3-time validation process until all tests pass consistently
+13. **CRITICAL - No Failing Tests**: Every individual test must either pass or be explicitly skipped after 10 fix attempts - no tests should remain in failing state
+14. **Red CI/CD on Failure**: GitHub Actions workflows must fail (show red status) immediately when any Playwright test fails
+15. **Green CI/CD on Success**: All GitHub Actions workflows must be green only when all tests pass
+16. **Build Integrity**: All existing build processes must continue to work without issues
 
 ### Quality Standards
 - [ ] Tests must be readable and follow "As a [user], I want [action], so that [outcome]" naming convention
@@ -282,22 +370,24 @@ Implement a complete suite of Playwright end-to-end tests that cover all user fl
 ## Definition of Done
 This issue is considered complete ONLY when:
 
-1. ✅ All user flows have comprehensive Playwright tests
-2. ✅ All accessible error scenarios and edge cases are tested
-3. ✅ **Page Object Model implemented**: Proper Page Object Model structure is in place following language-specific patterns
-4. ✅ Each user flow has its own dedicated test file/class
-4. ✅ All Playwright locators are properly disambiguated and avoid multi-element matches
-5. ✅ **CRITICAL**: Each individual test has been run and verified to pass (or explicitly skipped after 10 fix attempts)
-6. ✅ **MANDATORY**: Each test file/class has been run in its entirety and verified to pass before proceeding to next test file/class
-7. ✅ All commands from each GitHub Actions workflow have been identified and run 3 times consecutively by the agent with 100% pass rate for every workflow's commands (validation step only - not implemented in code)
-7. ✅ README.md is updated with clear testing instructions
-8. ✅ All existing build processes continue to work
-9. ✅ Playwright tests use the same language and build tools as the existing project
-10. ✅ Minimal impact on production code - changes limited to test enablement only
-11. ✅ Test execution reports all test results but fails build on any test failure
-12. ✅ No TODO comments exist in test files
-13. ✅ Tests follow the required naming convention
-14. ✅ Cross-browser testing is configured and working
+1. ✅ **User Flow Inventory Created**: Complete systematic analysis and documentation of ALL application user flows
+2. ✅ **100% Flow Coverage**: All user flows identified in the Flow Discovery phase have comprehensive Playwright tests - NO MISSING FLOWS
+3. ✅ **Final Coverage Report**: Comprehensive coverage validation report showing 100% completion with all flows marked ✅ COMPLETED
+4. ✅ **Self-Assessment Completed**: All mandatory self-assessment questions answered with evidence demonstrating thorough coverage
+5. ✅ **Page Object Model implemented**: Proper Page Object Model structure is in place following language-specific patterns
+6. ✅ **Separate Test File per Flow**: Each user flow has its own dedicated test file/class with meaningful test names
+7. ✅ **All Playwright locators**: Properly disambiguated and avoid multi-element matches
+8. ✅ **CRITICAL - Systematic Validation**: Each test file has been run in its entirety and verified to pass before proceeding to next test file/class
+9. ✅ **All accessible error scenarios and edge cases tested**: Through systematic application exploration
+10. ✅ **Agent Final Validation**: All commands from each GitHub Actions workflow identified and run 3 times consecutively with 100% pass rate (validation step only - not implemented in code)
+11. ✅ **README.md updated**: Clear testing instructions following project patterns
+12. ✅ **Build Integrity**: All existing build processes continue to work without issues
+13. ✅ **Language Consistency**: Playwright tests use the same language and build tools as the existing project
+14. ✅ **Minimal Production Impact**: Changes limited to test enablement only (test files, build configs, CI/CD, documentation)
+15. ✅ **Build Failure on Test Failure**: Test execution fails build immediately when any test fails
+16. ✅ **No TODO comments**: All tests implemented, no placeholder or unfinished tests
+17. ✅ **Test Naming Convention**: Tests follow "As a [user], I want [action], so that [outcome]" format
+18. ✅ **Cross-browser CI/CD**: Testing configured for multiple browsers in GitHub Actions workflows
 
 ## Technical Notes
 - **CRITICAL**: Use the same programming language and framework as the existing project - do not introduce new languages or build tools
@@ -314,10 +404,149 @@ This issue is considered complete ONLY when:
   - Configure `retries: 0` for local development so developers see failures immediately
   - Use proper wait strategies (`waitForSelector`, `waitForLoadState`) rather than relying heavily on retries
   - Set appropriate timeouts for different types of operations
-- **GitHub Actions Failure Handling**: 
+- **GitHub Actions Failure Handling**:
   - Do NOT use `continue-on-error: true` for test steps
   - Do NOT use `|| true` or similar error suppression in test commands
   - Ensure test steps fail the entire workflow when tests fail
+
+## GitHub Actions Workflow Examples for Playwright Setup
+
+Below are minimal, framework-specific GitHub Actions workflow examples that properly set up Playwright browsers before running tests. Use these as templates when creating or updating workflows:
+
+### Maven Projects (Java)
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Setup Node.js for Playwright
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Build with Maven
+        run: ./mvnw -B verify
+        # Alternative Maven commands:
+        # ./mvnw test (runs tests only)
+        # ./mvnw clean test (clean then test)
+        # ./mvnw -B compile test (compile then test)
+        # mvn test (if Maven installed globally)
+        # ./mvnw test -Dtest="*E2ETest" (run specific test pattern)
+```
+
+### Gradle Projects (Java/Kotlin)
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+      - name: Setup Node.js for Playwright
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Build with Gradle
+        run: ./gradlew build
+        # Alternative Gradle commands:
+        # ./gradlew test (runs tests only)
+        # ./gradlew clean test (clean then test)
+        # ./gradlew check (runs all verification tasks including tests)
+        # gradle test (if Gradle installed globally)
+        # ./gradlew test --tests "*E2ETest" (run specific test pattern)
+        # ./gradlew build -x test (build without tests, then run tests separately)
+```
+
+### Node.js Projects
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Run tests
+        run: npm test
+```
+
+### Python Projects
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install playwright pytest-playwright
+      - name: Install Playwright browsers
+        run: python -m playwright install --with-deps
+      - name: Run tests
+        run: pytest
+```
+
+### .NET Projects
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+      - name: Setup Node.js for Playwright
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Build and test
+        run: dotnet test
+```
+
+### Key Principles for All Frameworks:
+1. **Always install Playwright browsers BEFORE running build/test commands**
+2. **Use `--with-deps` flag to install system dependencies**
+3. **Include Node.js setup even for non-Node projects (required for `npx playwright install`)**
+4. **Use appropriate caching for each build tool**
+5. **Keep the workflow minimal - only add essential steps**
+6. **Let the build tool's test command discover and run Playwright tests**
 
 ---
 **Note**: This issue must be completed in its entirety. Partial completion is not acceptable. The agent should not mark this issue as complete until ALL acceptance criteria are met and verified.
