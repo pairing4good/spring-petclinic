@@ -4,9 +4,47 @@
 Implement a complete suite of Playwright end-to-end tests that cover all user flows, error scenarios, and edge cases for this web application. The goal is to achieve comprehensive test coverage that ensures application reliability and user experience quality.
 
 ## User Story
-**As a** development team  
-**I want** comprehensive end-to-end tests using Playwright  
+**As a** development team
+**I want** comprehensive end-to-end tests using Playwright
 **So that** we can confidently deploy changes knowing all user flows work correctly and catch regressions early
+
+## 🚨 CRITICAL REQUIREMENTS - ABSOLUTE MANDATORY 🚨
+
+### ⚠️ MOST IMPORTANT REQUIREMENT ⚠️
+**ALL TESTS MUST PASS OR BE EXPLICITLY SKIPPED AFTER EXACTLY 10 FIX ATTEMPTS**
+- **Every single test must either PASS or be explicitly SKIPPED - NO FAILING TESTS ALLOWED**
+- **Agent MUST attempt to fix each failing test EXACTLY 10 times before being allowed to skip**
+- **MANDATORY 10-Attempt Fix Cycle (NO SHORTCUTS ALLOWED)**:
+  1. **Write test** → **Run test** → **If PASS: continue to next test**
+  2. **If FAIL/ERROR: Attempt 1** → Fix obvious issues → **Run test** → **If PASS: continue**
+  3. **If still FAIL/ERROR: Attempt 2** → Fix locators/waits → **Run test** → **If PASS: continue**
+  4. **If still FAIL/ERROR: Attempt 3** → Fix test data → **Run test** → **If PASS: continue**
+  5. **If still FAIL/ERROR: Attempt 4** → Refactor approach → **Run test** → **If PASS: continue**
+  6. **If still FAIL/ERROR: Attempt 5** → Refactor structure → **Run test** → **If PASS: continue**
+  7. **If still FAIL/ERROR: Attempt 6** → Try different strategy → **Run test** → **If PASS: continue**
+  8. **If still FAIL/ERROR: Attempt 7** → Alternative locators → **Run test** → **If PASS: continue**
+  9. **If still FAIL/ERROR: Attempt 8** → Alternative methods → **Run test** → **If PASS: continue**
+  10. **If still FAIL/ERROR: Attempt 9** → Different test approach → **Run test** → **If PASS: continue**
+  11. **If still FAIL/ERROR: Attempt 10** → Final comprehensive fix → **Run test** → **If PASS: continue**
+  12. **ONLY AFTER 10 FAILED ATTEMPTS**: Skip test with detailed explanation
+- **🚫 AGENT CANNOT SKIP WITHOUT COMPLETING ALL 10 ATTEMPTS**
+- **🚫 NO SHORTCUTS - Agent must run test after each fix attempt**
+- **🚫 NO EARLY ABANDONMENT - Must attempt all 10 fixes before skipping**
+- **CRITICAL**: No test should ever be left in a failing state without completing the full 10-attempt cycle
+
+### ⚠️ EQUALLY IMPORTANT REQUIREMENT ⚠️
+**ALL GITHUB ACTIONS WORKFLOW COMMANDS MUST BE VALIDATED BY AGENT**
+- **Agent MUST extract and run ALL commands from EVERY `.github/workflows/*.yml` file**
+- **Each command must be run 3 consecutive times locally and pass every time**
+- **If ANY command fails during ANY run**: Use the 10-attempt fix process, then restart 3-run validation for ALL commands from the beginning
+- **This includes**: Build commands (`./mvnw verify`, `./gradlew build`), test commands (`./mvnw test`, `./gradlew test`), and any other workflow commands
+- **Success criteria**: High confidence that all workflow files will pass when run in CI/CD with these changes
+- **CRITICAL**: All workflow commands must pass 3 consecutive times before the task can be considered complete
+
+### 🔥 NON-NEGOTIABLE VALIDATION SEQUENCE 🔥
+1. **Write each test** → **Run test immediately** → **Fix if fails (up to 10 attempts)** → **Skip if unfixable** → **Repeat for next test**
+2. **After all tests written** → **Extract ALL workflow commands** → **Run each command 3 times consecutively** → **Fix failures (up to 10 attempts)** → **Restart full validation if any failures**
+3. **Only when Steps 1 & 2 are 100% complete**: Task can be marked as done
 
 ## Requirements
 ### 1. Application Analysis and Flow Discovery (MANDATORY FIRST STEP)
@@ -335,19 +373,19 @@ Answer these questions explicitly in documentation:
 ## Acceptance Criteria
 
 ### Critical Success Requirements
-1. **MANDATORY Flow Discovery**: Complete User Flow Inventory must be created showing ALL user flows identified through systematic application analysis
-2. **Complete Test Coverage**: 100% of ALL user flows identified in the Flow Discovery phase must have corresponding Playwright tests - NO EXCEPTIONS
-3. **All Tests Written**: No TODO comments or placeholder tests - all functionality must be tested
-4. **MANDATORY Page Object Model**: Proper Page Object Model implementation is REQUIRED - this is not optional
-5. **Separate Test Files per Flow**: Each user flow must have its own dedicated test file/class for comprehensive coverage
-6. **Element Disambiguation**: All Playwright locators must be specific and unambiguous, with proper strategies to handle elements that could match multiple results
-7. **CRITICAL - Systematic Test File Validation**: For EACH test file created, agent MUST run the entire test file immediately after writing it and fix any failures (up to 10 attempts per test file) before proceeding to the next flow
-8. **MANDATORY Coverage Validation Report**: Final report must show 100% coverage with ALL flows marked as ✅ COMPLETED with passing tests
-9. **CRITICAL - Self-Assessment Questions**: All final self-assessment questions must be answered explicitly with evidence demonstrating thorough coverage
-10. **Agent Final Validation**: The agent must identify and run ALL commands found in EACH GitHub Actions workflow 3 consecutive times (extract all commands from each workflow file and run them locally, do NOT attempt to execute the workflows themselves). This includes build commands, test commands, and any other commands that could cause build failure. If there are multiple workflows, validate each workflow's commands separately. **IMPORTANT**: This is ONLY for the agent's final verification - do NOT implement this as part of the test suite, build scripts, or GitHub Actions
-11. **100% Pass Rate**: All tests must pass in all 3 validation runs before considering the issue complete
-12. **Flaky Test Resolution**: If any tests fail during the 3-run validation, the agent must fix the flaky tests and then re-run the 3-time validation process until all tests pass consistently
-13. **CRITICAL - No Failing Tests**: Every individual test must either pass or be explicitly skipped after 10 fix attempts - no tests should remain in failing state
+1. **🚨 MOST CRITICAL - ALL TESTS MUST PASS OR BE SKIPPED**: Every individual test must either PASS or be explicitly SKIPPED after 10 fix attempts - NO tests should remain in failing state
+2. **🚨 EQUALLY CRITICAL - WORKFLOW COMMAND VALIDATION**: Agent must identify and run ALL commands from EACH GitHub Actions workflow 3 consecutive times locally. Each command must pass all 3 runs. If ANY command fails during ANY run, use 10-attempt fix process and restart full validation for ALL commands
+3. **MANDATORY Flow Discovery**: Complete User Flow Inventory must be created showing ALL user flows identified through systematic application analysis
+4. **Complete Test Coverage**: 100% of ALL user flows identified in the Flow Discovery phase must have corresponding Playwright tests - NO EXCEPTIONS
+5. **All Tests Written**: No TODO comments or placeholder tests - all functionality must be tested
+6. **MANDATORY Page Object Model**: Proper Page Object Model implementation is REQUIRED - this is not optional
+7. **Separate Test Files per Flow**: Each user flow must have its own dedicated test file/class for comprehensive coverage
+8. **Element Disambiguation**: All Playwright locators must be specific and unambiguous, with proper strategies to handle elements that could match multiple results
+9. **CRITICAL - Systematic Test File Validation**: For EACH test file created, agent MUST run the entire test file immediately after writing it and fix any failures (up to 10 attempts per test file) before proceeding to the next flow
+10. **MANDATORY Coverage Validation Report**: Final report must show 100% coverage with ALL flows marked as ✅ COMPLETED with passing tests
+11. **CRITICAL - Self-Assessment Questions**: All final self-assessment questions must be answered explicitly with evidence demonstrating thorough coverage
+12. **100% Pass Rate**: All tests must pass in all 3 validation runs before considering the issue complete
+13. **Flaky Test Resolution**: If any tests fail during the 3-run validation, the agent must fix the flaky tests and then re-run the 3-time validation process until all tests pass consistently
 14. **Red CI/CD on Failure**: GitHub Actions workflows must fail (show red status) immediately when any Playwright test fails
 15. **Green CI/CD on Success**: All GitHub Actions workflows must be green only when all tests pass
 16. **Build Integrity**: All existing build processes must continue to work without issues
@@ -370,24 +408,25 @@ Answer these questions explicitly in documentation:
 ## Definition of Done
 This issue is considered complete ONLY when:
 
-1. ✅ **User Flow Inventory Created**: Complete systematic analysis and documentation of ALL application user flows
-2. ✅ **100% Flow Coverage**: All user flows identified in the Flow Discovery phase have comprehensive Playwright tests - NO MISSING FLOWS
-3. ✅ **Final Coverage Report**: Comprehensive coverage validation report showing 100% completion with all flows marked ✅ COMPLETED
-4. ✅ **Self-Assessment Completed**: All mandatory self-assessment questions answered with evidence demonstrating thorough coverage
-5. ✅ **Page Object Model implemented**: Proper Page Object Model structure is in place following language-specific patterns
-6. ✅ **Separate Test File per Flow**: Each user flow has its own dedicated test file/class with meaningful test names
-7. ✅ **All Playwright locators**: Properly disambiguated and avoid multi-element matches
-8. ✅ **CRITICAL - Systematic Validation**: Each test file has been run in its entirety and verified to pass before proceeding to next test file/class
-9. ✅ **All accessible error scenarios and edge cases tested**: Through systematic application exploration
-10. ✅ **Agent Final Validation**: All commands from each GitHub Actions workflow identified and run 3 times consecutively with 100% pass rate (validation step only - not implemented in code)
-11. ✅ **README.md updated**: Clear testing instructions following project patterns
-12. ✅ **Build Integrity**: All existing build processes continue to work without issues
-13. ✅ **Language Consistency**: Playwright tests use the same language and build tools as the existing project
-14. ✅ **Minimal Production Impact**: Changes limited to test enablement only (test files, build configs, CI/CD, documentation)
-15. ✅ **Build Failure on Test Failure**: Test execution fails build immediately when any test fails
-16. ✅ **No TODO comments**: All tests implemented, no placeholder or unfinished tests
-17. ✅ **Test Naming Convention**: Tests follow "As a [user], I want [action], so that [outcome]" format
-18. ✅ **Cross-browser CI/CD**: Testing configured for multiple browsers in GitHub Actions workflows
+1. ✅ **🚨 MOST CRITICAL - NO FAILING TESTS**: Every single test either PASSES or is explicitly SKIPPED after 10 fix attempts - NO tests remain in failing state
+2. ✅ **🚨 EQUALLY CRITICAL - ALL WORKFLOW COMMANDS VALIDATED**: All commands from each GitHub Actions workflow identified and run 3 times consecutively with 100% pass rate (validation step only - not implemented in code)
+3. ✅ **User Flow Inventory Created**: Complete systematic analysis and documentation of ALL application user flows
+4. ✅ **100% Flow Coverage**: All user flows identified in the Flow Discovery phase have comprehensive Playwright tests - NO MISSING FLOWS
+5. ✅ **Final Coverage Report**: Comprehensive coverage validation report showing 100% completion with all flows marked ✅ COMPLETED
+6. ✅ **Self-Assessment Completed**: All mandatory self-assessment questions answered with evidence demonstrating thorough coverage
+7. ✅ **Page Object Model implemented**: Proper Page Object Model structure is in place following language-specific patterns
+8. ✅ **Separate Test File per Flow**: Each user flow has its own dedicated test file/class with meaningful test names
+9. ✅ **All Playwright locators**: Properly disambiguated and avoid multi-element matches
+10. ✅ **CRITICAL - Systematic Validation**: Each test file has been run in its entirety and verified to pass before proceeding to next test file/class
+11. ✅ **All accessible error scenarios and edge cases tested**: Through systematic application exploration
+12. ✅ **README.md updated**: Clear testing instructions following project patterns
+13. ✅ **Build Integrity**: All existing build processes continue to work without issues
+14. ✅ **Language Consistency**: Playwright tests use the same language and build tools as the existing project
+15. ✅ **Minimal Production Impact**: Changes limited to test enablement only (test files, build configs, CI/CD, documentation)
+16. ✅ **Build Failure on Test Failure**: Test execution fails build immediately when any test fails
+17. ✅ **No TODO comments**: All tests implemented, no placeholder or unfinished tests
+18. ✅ **Test Naming Convention**: Tests follow "As a [user], I want [action], so that [outcome]" format
+19. ✅ **Cross-browser CI/CD**: Testing configured for multiple browsers in GitHub Actions workflows
 
 ## Technical Notes
 - **CRITICAL**: Use the same programming language and framework as the existing project - do not introduce new languages or build tools
