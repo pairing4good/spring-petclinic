@@ -18,31 +18,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - uses: actions/setup-node@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          node-version: lts/*
-          # Remove cache if you don't have package-lock.json yet
-      
-      - name: Install or update dependencies
-        run: |
-          # Install Playwright if not already in package.json
-          if [ ! -f "package.json" ]; then
-            npm init -y
-          fi
-          
-          # Install Playwright test package if not present
-          if ! npm list @playwright/test > /dev/null 2>&1; then
-            npm install --save-dev @playwright/test
-          fi
-          
-          # Install all dependencies
-          npm install
-      
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Set up Node.js for Playwright
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Install Maven dependencies
+        run: ./mvnw compile test-compile
+
       - name: Install Playwright browsers and dependencies
-        run: npx playwright install --with-deps
-        # Alternative: Install only specific browsers to save time
-        # run: npx playwright install chromium --with-deps
-      
-      # Optional: Verify installation
-      - name: Verify Playwright installation
-        run: npx playwright --version
+        run: npx playwright install --with-deps chromium firefox webkit

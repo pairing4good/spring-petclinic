@@ -25,5 +25,11 @@ jobs:
           java-version: ${{matrix.java}}
           distribution: 'adopt'
           cache: maven
+      - name: Setup Node.js for Playwright
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
       - name: Build with Maven Wrapper
         run: ./mvnw -B verify
