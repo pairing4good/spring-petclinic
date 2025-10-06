@@ -52,12 +52,36 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
+  // Playwright for E2E testing
+  testImplementation 'com.microsoft.playwright:playwright:1.49.0'
   checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
   checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
 
 tasks.named('test') {
   useJUnitPlatform()
+  
+  // Include all test types by default
+  include '**/*Test.class'
+  include '**/*Tests.class'
+  include '**/*E2ETest.class'
+  
+  // Ensure build fails on test failures
+  ignoreFailures = false
+  
+  // Set system properties for Playwright
+  systemProperty 'playwright.headless', System.getProperty('playwright.headless', 'true')
+  systemProperty 'playwright.browser', System.getProperty('playwright.browser', 'chromium')
+}
+
+// Separate task for E2E tests only
+task e2eTest(type: Test) {
+  useJUnitPlatform()
+  include '**/*E2ETest.class'
+  ignoreFailures = false
+  
+  systemProperty 'playwright.headless', 'true'
+  systemProperty 'playwright.browser', System.getProperty('playwright.browser', 'chromium')
 }
 
 checkstyle {
