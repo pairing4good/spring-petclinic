@@ -82,6 +82,64 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## Playwright User Acceptance Tests
+
+This project includes comprehensive Playwright acceptance tests that validate all user flows through a real browser. These tests are written in a user-story format using "As a [user], I want [goal], so that [benefit]" statements for maximum readability and maintainability.
+
+### Running Playwright Tests
+
+#### Prerequisites
+- Java 17 or newer
+- The application should be built successfully (`./mvnw clean compile` or `./gradlew build`)
+
+#### Using Gradle (Recommended)
+
+To install Playwright browsers (first time setup):
+```bash
+./gradlew playwrightInstall
+```
+
+To run all Playwright acceptance tests:
+```bash
+./gradlew playwrightTest
+```
+
+To run Playwright tests along with all other tests:
+```bash
+./gradlew test
+```
+
+#### Using Maven
+
+To run Playwright tests with Maven:
+```bash
+./mvnw test -Dtest="*AcceptanceTest"
+```
+
+### Test Coverage
+
+The Playwright acceptance tests cover all major user flows:
+
+- **Home Page Navigation**: Welcome page display and navigation menu functionality
+- **Owner Management**: Search, view, create, and edit pet owners
+- **Pet Management**: Add new pets to owners, edit pet information, view pet details
+- **Visit Management**: Add veterinary visits to pets, track medical history
+- **Veterinarians**: View veterinarian list and specialties with pagination
+- **Error Handling**: Graceful error page display and recovery
+- **Cross-Application Navigation**: Consistent navigation throughout all pages
+
+### Test Structure
+
+- `BasePlaywrightTest`: Base class providing browser setup and common utilities
+- `HomePageAcceptanceTest`: Tests for home page and main navigation
+- `PetClinicAcceptanceTest`: Comprehensive tests covering all major user workflows
+
+All tests use headless Chrome by default but can be configured to run in headed mode for debugging by modifying the `BasePlaywrightTest` configuration.
+
+### Integration with CI/CD
+
+The Playwright tests are tagged with `@Tag("playwright")` and are included in the continuous integration pipeline. They run automatically on every build to ensure all user flows remain functional.
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.

@@ -27,5 +27,11 @@ jobs:
           cache: maven
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+      - name: Install Playwright Browsers
+        run: ./gradlew playwrightInstall
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Run Playwright Acceptance Tests
+        run: ./gradlew playwrightTest --continue
+        env:
+          CI: true
