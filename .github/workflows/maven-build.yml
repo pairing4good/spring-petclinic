@@ -27,3 +27,6 @@ jobs:
           cache: maven
       - name: Build with Maven Wrapper
         run: ./mvnw -B verify
+      - name: Run Playwright E2E Tests
+        run: ./mvnw test -Pe2e
+        continue-on-error: false
