@@ -27,3 +27,36 @@ jobs:
           cache: maven
       - name: Build with Maven Wrapper
         run: ./mvnw -B verify
+      
+      # Install Node.js for Playwright
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      # Install Playwright dependencies
+      - name: Install Playwright dependencies
+        run: npm ci
+      
+      # Install Playwright browsers
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium || true
+      
+      # Run Playwright tests three times to ensure reliability
+      - name: Run Playwright Tests (First Run)
+        run: npm test
+      
+      - name: Run Playwright Tests (Second Run)
+        run: npm test
+      
+      - name: Run Playwright Tests (Third Run)
+        run: npm test
+      
+      # Upload Playwright test results
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
