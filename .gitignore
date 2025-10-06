@@ -49,3 +49,9 @@ out/
 _site/
 *.css
 !petclinic.css
+
+### Playwright ###
+playwright-report/
+test-results/
+videos/
+screenshots/
