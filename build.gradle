@@ -52,13 +52,37 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
+  testImplementation 'com.microsoft.playwright:playwright:1.48.0'
   checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
   checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
 
 tasks.named('test') {
-  useJUnitPlatform()
+  useJUnitPlatform {
+    excludeTags 'playwright'
+  }
 }
+
+// Playwright tasks
+task installPlaywright(type: JavaExec) {
+  group = 'playwright'
+  description = 'Install Playwright browsers'
+  classpath = sourceSets.test.runtimeClasspath
+  mainClass = 'com.microsoft.playwright.CLI'
+  args = ['install']
+}
+
+task playwrightTest(type: Test) {
+  group = 'playwright'
+  description = 'Run Playwright user acceptance tests'
+  useJUnitPlatform {
+    includeTags 'playwright'
+  }
+  systemProperty 'junit.jupiter.parallel.enabled', 'false'
+}
+
+// Ensure Playwright browsers are installed before running tests
+playwrightTest.dependsOn installPlaywright
 
 checkstyle {
   configDirectory = project.file('src/checkstyle')

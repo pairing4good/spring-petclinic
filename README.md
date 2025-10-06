@@ -82,6 +82,81 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## User Acceptance Testing with Playwright
+
+The PetClinic application includes comprehensive user acceptance tests built with [Playwright](https://playwright.dev/) for browser-based testing. These tests verify the complete user journeys and ensure the application works correctly from an end-user perspective.
+
+### Prerequisites for Playwright Tests
+
+- A stable internet connection for downloading browser binaries
+- Sufficient disk space for browser installations (~200MB per browser)
+- Display server for GUI testing (or run in headless mode)
+
+### Running Playwright Tests Locally
+
+1. **Install Playwright browsers** (first time only):
+   ```bash
+   ./gradlew installPlaywright
+   ```
+   
+   Note: If browser installation fails due to network issues, you can install browsers manually:
+   ```bash
+   npx playwright install chromium
+   ```
+
+2. **Run all Playwright user acceptance tests**:
+   ```bash
+   ./gradlew playwrightTest
+   ```
+
+3. **Run specific test suites**:
+   ```bash
+   # Run only welcome page tests
+   ./gradlew test --tests "*WelcomePageUserAcceptanceTests*"
+   
+   # Run only owner management tests
+   ./gradlew test --tests "*OwnerManagementUserAcceptanceTests*"
+   
+   # Run only veterinarian tests
+   ./gradlew test --tests "*VeterinarianUserAcceptanceTests*"
+   ```
+
+4. **Run with visible browser** (for debugging):
+   ```bash
+   ./gradlew playwrightTest -Dplaywright.headless=false
+   ```
+
+5. **Run the framework validation test** (verifies setup without browsers):
+   ```bash
+   ./gradlew test --tests "*PlaywrightFrameworkValidationTest*"
+   ```
+
+### Test Coverage
+
+The Playwright test suite covers all major user journeys:
+
+- **Welcome Page Navigation**: Basic app functionality and navigation
+- **Owner Management**: Search, create, edit, and view pet owners
+- **Pet Management**: Add pets to owners and manage pet information
+- **Visit Management**: Schedule and view veterinary visits
+- **Veterinarian Information**: View available vets and their specialties
+- **Error Handling**: Graceful error pages and edge case handling
+
+Each test follows the user story format:
+- "As a [user role]"
+- "I want to [perform action]"  
+- "So that [achieve benefit]"
+
+### Test Organization
+
+- **PlaywrightTestBase**: Base class providing common test setup and utilities
+- **PlaywrightFrameworkValidationTest**: Validates framework configuration without browser dependencies
+- Browser-based tests are tagged with `@Tag("playwright")` and run separately from unit tests
+
+### Continuous Integration
+
+The Playwright tests can run in CI environments with proper browser installation. The regular test suite (excluding browser tests) runs automatically with every build to ensure application functionality.
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.
