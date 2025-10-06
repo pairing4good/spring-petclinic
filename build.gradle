@@ -52,12 +52,44 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
+  testImplementation 'com.microsoft.playwright:playwright:1.49.0'
   checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
   checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
 
 tasks.named('test') {
   useJUnitPlatform()
+}
+
+// Task for running only E2E tests
+task e2eTest(type: Test) {
+  useJUnitPlatform()
+  include '**/*E2ETest*'
+  systemProperty 'headless', 'true'
+  
+  testLogging {
+    events "passed", "skipped", "failed"
+    exceptionFormat "full"
+  }
+}
+
+// Task for running Playwright tests specifically
+task playwrightTest(type: Test) {
+  useJUnitPlatform()
+  include '**/*E2ETest*'
+  systemProperty 'headless', 'true'
+  
+  // Configure retries for CI
+  if (System.getenv('CI')) {
+    systemProperty 'playwright.retries', '2'
+  } else {
+    systemProperty 'playwright.retries', '0'
+  }
+  
+  testLogging {
+    events "passed", "skipped", "failed"
+    exceptionFormat "full"
+  }
 }
 
 checkstyle {

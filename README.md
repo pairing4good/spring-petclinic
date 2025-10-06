@@ -82,6 +82,145 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## Running Tests
+
+### Unit and Integration Tests
+
+Run all tests (unit and integration):
+
+```bash
+./mvnw test
+```
+
+or with Gradle:
+
+```bash
+./gradlew test
+```
+
+### End-to-End Tests with Playwright
+
+This project includes comprehensive Playwright end-to-end tests that cover all user flows, error scenarios, and edge cases.
+
+#### Prerequisites for E2E Tests
+
+First, install Playwright browsers (only needed once):
+
+```bash
+npx playwright install chromium
+```
+
+#### Running E2E Tests
+
+Run all E2E tests with Maven:
+
+```bash
+./mvnw test -Dtest="**/*E2ETest"
+```
+
+Run E2E tests with the dedicated profile:
+
+```bash
+./mvnw test -Pe2e
+```
+
+Run all E2E tests with Gradle:
+
+```bash
+./gradlew e2eTest
+```
+
+or use the Playwright-specific task:
+
+```bash
+./gradlew playwrightTest
+```
+
+#### Running Specific E2E Test Files
+
+Run a specific test class:
+
+```bash
+./mvnw test -Dtest=SimpleE2ETest
+./mvnw test -Dtest=FindOwnersE2ETest
+./mvnw test -Dtest=OwnerManagementE2ETest
+./mvnw test -Dtest=VeterinarianE2ETest
+./mvnw test -Dtest=ErrorHandlingE2ETest
+./mvnw test -Dtest=NavigationE2ETest
+```
+
+With Gradle:
+
+```bash
+./gradlew test --tests "SimpleE2ETest"
+./gradlew test --tests "FindOwnersE2ETest"
+```
+
+#### Running Specific Test Methods
+
+Run a specific test method:
+
+```bash
+./mvnw test -Dtest=SimpleE2ETest#shouldLoadHomePage
+./mvnw test -Dtest=FindOwnersE2ETest#shouldSearchOwnersByLastName
+```
+
+#### E2E Test Configuration
+
+The E2E tests are configured through `playwright.config.properties`:
+
+- **Base URL**: Automatically configured to use Spring Boot's random port
+- **Browser**: Chromium (headless by default)
+- **Retries**: 0 for local development, 2 for CI environments
+- **Timeout**: 30 seconds for actions, 5 seconds for assertions
+
+#### E2E Test Coverage
+
+The Playwright tests cover:
+
+- **Home Page**: Navigation, UI elements, basic functionality
+- **Find Owners**: Search functionality, validation, edge cases
+- **Owner Management**: CRUD operations, form validation, data handling
+- **Veterinarians**: Listing, pagination, information display
+- **Error Handling**: Error pages, validation errors, graceful degradation
+- **Navigation**: Cross-page flows, browser controls, deep linking
+
+#### Troubleshooting E2E Tests
+
+**Browser Installation Issues:**
+```bash
+# Install browsers manually
+npx playwright install --with-deps chromium
+
+# Or install all browsers
+npx playwright install
+```
+
+**Port Conflicts:**
+The tests use Spring Boot's random port feature, so port conflicts should not occur.
+
+**Timeout Issues:**
+Increase timeouts in `playwright.config.properties` if tests are flaky:
+```properties
+playwright.timeout=45000
+playwright.expect.timeout=10000
+```
+
+**Running in Non-Headless Mode (for debugging):**
+```bash
+# Set headless=false in playwright.config.properties
+# Or use system property
+./mvnw test -Dtest=SimpleE2ETest -Dheadless=false
+```
+
+**CI/CD Environment:**
+The tests are configured to run in GitHub Actions with proper browser installation and retry configuration.
+
+### Test Reports
+
+Maven generates test reports in `target/surefire-reports/`
+Gradle generates test reports in `build/reports/tests/`
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.
