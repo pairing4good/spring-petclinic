@@ -49,3 +49,8 @@ out/
 _site/
 *.css
 !petclinic.css
+
+### Playwright ###
+playwright-browsers/
+target/playwright-screenshots/
+.env.playwright.local

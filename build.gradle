@@ -52,12 +52,56 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
+  testImplementation 'com.microsoft.playwright:playwright:1.48.0'
   checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
   checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
 
 tasks.named('test') {
   useJUnitPlatform()
+  exclude '**/playwright/**'
+}
+
+// Playwright test task
+task playwrightTest(type: Test) {
+  useJUnitPlatform()
+  include '**/playwright/**'
+  systemProperty 'junit.jupiter.execution.parallel.enabled', 'false'
+  
+  // Configure environment for stable browser execution
+  environment 'PLAYWRIGHT_BROWSERS_PATH', './playwright-browsers'
+  environment 'PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD', '0'
+  
+  testLogging {
+    events "passed", "skipped", "failed"
+    exceptionFormat "full"
+  }
+  
+  // Configure timeouts for stability
+  systemProperty 'junit.jupiter.execution.timeout.default', '60s'
+  systemProperty 'junit.jupiter.execution.timeout.testable.method.default', '60s'
+}
+
+// Task to install Playwright browsers
+task installPlaywrightBrowsers(type: Exec) {
+  group = 'playwright'
+  description = 'Install Playwright browsers'
+  
+  commandLine 'npx', 'playwright', 'install', 'chromium'
+  
+  doFirst {
+    println 'Installing Playwright browsers...'
+  }
+  
+  doLast {
+    println 'Playwright browsers installed successfully'
+  }
+}
+
+// Make playwrightTest depend on browser installation when npx is available
+playwrightTest.doFirst {
+  println 'Running Playwright tests...'
+  println 'Note: Ensure Playwright browsers are installed with: npx playwright install chromium'
 }
 
 checkstyle {
