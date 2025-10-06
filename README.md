@@ -142,6 +142,151 @@ GitHub org is the "canonical" implementation based on Spring Boot and Thymeleaf.
 [quite a few forks](https://spring-petclinic.github.io/docs/forks.html) in the GitHub org
 [spring-petclinic](https://github.com/spring-petclinic). If you are interested in using a different technology stack to implement the Pet Clinic, please join the community there.
 
+## Testing
+
+### Unit and Integration Tests
+
+The Spring PetClinic application includes comprehensive unit and integration tests using JUnit 5 and Spring Boot Test framework. Run all tests with:
+
+```bash
+./mvnw test
+```
+
+### End-to-End (E2E) Testing with Playwright
+
+The application includes a comprehensive Playwright E2E test suite that covers all user-facing functionality.
+
+#### Prerequisites
+
+- Node.js 20+ and npm
+- Playwright browsers installed
+
+#### Setup and Installation
+
+1. **Install Node.js dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Install Playwright browsers:**
+   ```bash
+   npx playwright install
+   ```
+
+#### Running E2E Tests
+
+1. **Start the application:**
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+
+2. **Run all E2E tests:**
+   ```bash
+   npm test
+   ```
+
+3. **Run tests with UI (headed mode):**
+   ```bash
+   npm run test:headed
+   ```
+
+4. **Debug tests:**
+   ```bash
+   npm run test:debug
+   ```
+
+5. **View test reports:**
+   ```bash
+   npm run test:report
+   ```
+
+#### E2E Test Coverage
+
+The test suite includes 45+ comprehensive tests covering:
+
+- **Navigation and Routing**: All pages, breadcrumbs, browser back/forward
+- **Owner Management**: Create, read, update, search owners
+- **Pet Management**: Add/edit pets for owners
+- **Visit Management**: Add visits to pets
+- **Form Validation**: Client/server-side validation, error handling
+- **Search Functionality**: Owner search by last name with pagination
+- **Responsive Design**: Multiple viewport sizes (desktop, tablet, mobile)
+- **Accessibility**: Keyboard navigation, ARIA labels, screen reader support
+- **Cross-Browser**: Chrome, Firefox, Safari/WebKit compatibility
+- **Error Handling**: 404 pages, form errors, custom error pages
+
+#### Cross-Browser Testing
+
+Run tests on specific browsers:
+
+```bash
+# Chrome/Chromium
+npx playwright test --project=chromium
+
+# Firefox
+npx playwright test --project=firefox
+
+# Safari/WebKit
+npx playwright test --project=webkit
+
+# Mobile viewports
+npx playwright test --project="Mobile Chrome"
+npx playwright test --project="Mobile Safari"
+```
+
+#### Maven Integration
+
+E2E tests are integrated with Maven and run during the `integration-test` phase:
+
+```bash
+# Run all tests including E2E
+./mvnw verify
+
+# Run only integration tests
+./mvnw integration-test
+```
+
+#### Test Structure
+
+The E2E tests follow the Page Object Model (POM) pattern for maintainability:
+
+```
+src/test/playwright/
+├── pages/                 # Page Object Model classes
+│   ├── BasePage.js       # Common functionality
+│   ├── HomePage.js       # Welcome page
+│   ├── FindOwnersPage.js # Owner search
+│   ├── OwnerFormPage.js  # Owner creation/editing
+│   └── ...               # Other page objects
+├── navigation.spec.js     # Navigation and routing tests
+├── owners.spec.js        # Owner CRUD operations
+├── pets-visits.spec.js   # Pet and visit management
+├── form-validation.spec.js # Form validation and errors
+├── responsive.spec.js    # Responsive design tests
+├── accessibility.spec.js # Accessibility compliance
+└── cross-browser.spec.js # Cross-browser compatibility
+```
+
+#### Troubleshooting
+
+**Browser Installation Issues:**
+```bash
+# Clear browser cache and reinstall
+npx playwright install --force
+```
+
+**Port Conflicts:**
+If port 8080 is in use, the tests will fail. Ensure the Spring Boot application is running on port 8080 or update the `baseURL` in `playwright.config.js`.
+
+**Test Failures:**
+- Check application logs for errors
+- Verify database state (H2 in-memory database)
+- Review test artifacts in `test-results/` directory
+- Use `npm run test:debug` to step through failing tests
+
+**CI/CD Integration:**
+The test suite is configured for CI environments with proper browser installation and headless execution. See `playwright.config.js` for CI-specific configurations.
+
 ## Interaction with other open-source projects
 
 One of the best parts about working on the Spring Petclinic application is that we have the opportunity to work in direct contact with many Open Source projects. We found bugs/suggested improvements on various topics such as Spring, Spring Data, Bean Validation and even Eclipse! In many cases, they've been fixed/implemented in just a few days.
