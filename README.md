@@ -82,6 +82,102 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## End-to-End Testing with Playwright
+
+This project includes comprehensive end-to-end (E2E) tests using [Playwright for Java](https://playwright.dev/java/) that cover all user flows, error scenarios, and edge cases.
+
+### E2E Test Coverage
+
+The E2E test suite includes:
+
+- **Homepage and Navigation** (11 tests): Navigation functionality, responsive design, accessibility, browser compatibility, and performance
+- **Owner Management** (12 tests): Owner search, creation, editing, form validation, special characters handling, and error scenarios
+- **Veterinarians and Error Handling** (10 tests): Veterinarian page display, error pages, 404 handling, recovery flows, and responsive design
+
+Total: **33 comprehensive E2E tests** covering the complete user experience.
+
+### Running E2E Tests
+
+#### Prerequisites
+
+- Java 17 or newer
+- All project dependencies installed (Maven or Gradle will handle Playwright dependencies automatically)
+
+#### Running with Gradle
+
+```bash
+# Run all tests (including E2E tests)
+./gradlew test
+
+# Run only E2E tests  
+./gradlew test --tests "*E2ETest"
+
+# Run specific E2E test suite
+./gradlew test --tests "HomepageAndNavigationE2ETest"
+./gradlew test --tests "OwnerManagementE2ETest"
+./gradlew test --tests "VeterinariansAndErrorHandlingE2ETest"
+```
+
+#### Running with Maven
+
+```bash
+# Run all tests (including E2E tests)
+./mvnw test
+
+# Run only E2E tests
+./mvnw test -Dtest="**/*E2ETest"
+
+# Run specific E2E test suite
+./mvnw test -Dtest="HomepageAndNavigationE2ETest"
+./mvnw test -Dtest="OwnerManagementE2ETest"
+./mvnw test -Dtest="VeterinariansAndErrorHandlingE2ETest"
+```
+
+#### Browser Configuration
+
+The E2E tests run in headless Chrome by default for CI/CD compatibility. The tests automatically:
+
+- Download required browser binaries on first run
+- Handle browser lifecycle (start/stop)
+- Provide proper test isolation with fresh browser contexts
+- Support multiple viewport sizes for responsive testing
+
+#### Test Architecture
+
+The E2E tests follow the **Page Object Model** pattern for maintainability:
+
+- **Base Classes**: `BaseE2ETest` provides common Playwright setup and utilities
+- **Page Objects**: `HomePage`, `FindOwnersPage`, `AddOwnerPage`, etc. encapsulate page interactions
+- **Test Classes**: `*E2ETest` classes contain the actual test scenarios using descriptive "As a user..." naming
+
+#### Debugging E2E Tests
+
+To debug failing E2E tests:
+
+1. **Check test reports**: `build/reports/tests/test/index.html` (Gradle) or `target/surefire-reports/` (Maven)
+2. **Run individual tests**: Use the specific test class commands shown above
+3. **Enable headed mode**: Modify `BaseE2ETest.java` to set `setHeadless(false)` for visual debugging
+
+#### Continuous Integration
+
+The E2E tests are integrated into GitHub Actions workflows and will:
+
+- Run automatically on all pull requests
+- Fail the build if any E2E test fails
+- Provide detailed test reports and failure information
+- Support parallel execution for faster CI/CD pipelines
+
+### Troubleshooting E2E Tests
+
+**Common Issues:**
+
+1. **Browser download fails**: Ensure internet connectivity and sufficient disk space
+2. **Port conflicts**: The tests use random ports automatically to avoid conflicts
+3. **Timeout errors**: Tests have built-in retry logic and appropriate timeouts
+4. **Flaky tests**: All tests are designed to be reliable with proper wait strategies
+
+**Performance:** E2E tests typically complete in under 2 minutes for the full suite.
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.

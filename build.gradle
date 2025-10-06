@@ -29,6 +29,7 @@ ext.springJavaformatCheckstyleVersion = "0.0.46"
 ext.webjarsLocatorLiteVersion = "1.1.0"
 ext.webjarsFontawesomeVersion = "4.7.0"
 ext.webjarsBootstrapVersion = "5.3.6"
+ext.playwrightVersion = "1.50.0"
 
 dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-cache'
@@ -52,6 +53,7 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
+  testImplementation "com.microsoft.playwright:playwright:${playwrightVersion}"
   checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
   checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
