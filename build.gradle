@@ -52,12 +52,29 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
+  
+  // Playwright for E2E testing
+  testImplementation 'com.microsoft.playwright:playwright:1.50.0'
   checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
   checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
 
 tasks.named('test') {
   useJUnitPlatform()
+}
+
+// E2E test task
+task playwrightTest(type: Test) {
+  useJUnitPlatform()
+  include '**/*E2ETest.class'
+  testClassesDirs = sourceSets.test.output.classesDirs
+  classpath = sourceSets.test.runtimeClasspath
+}
+
+// Make sure regular test task includes all tests
+test {
+  include '**/*Test.class'
+  include '**/*E2ETest.class'
 }
 
 checkstyle {

@@ -82,6 +82,156 @@ docker compose up postgres
 
 At development time we recommend you use the test applications set up as `main()` methods in `PetClinicIntegrationTests` (using the default H2 database and also adding Spring Boot Devtools), `MySqlTestApplication` and `PostgresIntegrationTests`. These are set up so that you can run the apps in your IDE to get fast feedback and also run the same classes as integration tests against the respective database. The MySql integration tests use Testcontainers to start the database in a Docker container, and the Postgres tests use Docker Compose to do the same thing.
 
+## Running Tests
+
+This project includes comprehensive test coverage including unit tests, integration tests, and end-to-end (E2E) tests using Playwright.
+
+### Unit and Integration Tests
+
+To run all unit and integration tests:
+
+**With Maven:**
+```bash
+./mvnw test
+```
+
+**With Gradle:**
+```bash
+./gradlew test
+```
+
+### End-to-End Tests with Playwright
+
+The project includes comprehensive Playwright end-to-end tests that cover all user flows, error scenarios, and edge cases.
+
+#### Prerequisites for E2E Tests
+
+1. **Java 17 or newer** (already required for the main application)
+2. **Node.js** (for Playwright browser installation)
+3. **Playwright browsers** (installed automatically in CI, or manually as described below)
+
+#### Installing Playwright Browsers
+
+Before running E2E tests locally, you need to install Playwright browsers:
+
+```bash
+# Install Node.js and Playwright browsers
+npx playwright install chromium
+```
+
+#### Running E2E Tests
+
+**With Maven:**
+```bash
+# Run all tests including E2E tests
+./mvnw test
+
+# Run only E2E tests
+./mvnw test -Pe2e
+
+# Run specific E2E test class
+./mvnw test -Dtest="NavigationE2ETest"
+
+# Run specific E2E test method
+./mvnw test -Dtest="NavigationE2ETest#testHomePageAccessAndContent"
+```
+
+**With Gradle:**
+```bash
+# Run all tests including E2E tests
+./gradlew test
+
+# Run only E2E tests
+./gradlew playwrightTest
+
+# Run specific E2E test class
+./gradlew test --tests "NavigationE2ETest"
+
+# Run specific E2E test method
+./gradlew test --tests "NavigationE2ETest.testHomePageAccessAndContent"
+```
+
+#### E2E Test Coverage
+
+The Playwright E2E tests cover:
+
+- **Navigation & Routing**: All pages, breadcrumbs, browser back/forward functionality
+- **Owner Management**: Search, add, edit, view owner details, form validation
+- **Pet Management**: Add pets, edit pet information, pet type validation
+- **Visit Management**: Add visits, visit form validation, visit history
+- **Veterinarians**: List view, pagination, specialty display
+- **Error Handling**: 404 pages, 500 errors, form validation errors, XSS/SQL injection prevention
+- **Cross-browser Compatibility**: Chromium, Firefox, WebKit/Safari
+- **Responsive Design**: Desktop, tablet, and mobile viewports
+- **Accessibility**: Keyboard navigation, proper form labels, screen reader compatibility
+- **Edge Cases**: Empty states, special characters, long inputs, concurrent access
+
+#### Cross-Browser Testing
+
+To run tests in different browsers:
+
+```bash
+# Run tests in Firefox
+./mvnw test -Pe2e -Dbrowser=firefox
+
+# Run tests in WebKit/Safari
+./mvnw test -Pe2e -Dbrowser=webkit
+
+# Run tests in headful mode (visible browser)
+./mvnw test -Pe2e -Dheadless=false
+```
+
+**With Gradle:**
+```bash
+# Run tests in Firefox
+./gradlew playwrightTest -Dbrowser=firefox
+
+# Run tests in WebKit/Safari  
+./gradlew playwrightTest -Dbrowser=webkit
+
+# Run tests in headful mode
+./gradlew playwrightTest -Dheadless=false
+```
+
+#### Troubleshooting E2E Tests
+
+**Browser Installation Issues:**
+```bash
+# If browsers fail to install automatically
+npx playwright install
+
+# For specific browsers only
+npx playwright install chromium firefox webkit
+```
+
+**Common Issues:**
+- **Tests fail with "browser not found"**: Run `npx playwright install chromium`
+- **Tests are flaky**: Check that the application is running on the expected port
+- **Slow test execution**: Use headless mode (`-Dheadless=true`) for faster execution
+- **Permission issues**: Ensure proper file permissions for browser installation directory
+
+**Environment Variables:**
+```bash
+# Set custom browser installation path
+export PLAYWRIGHT_BROWSERS_PATH=/path/to/browsers
+
+# Skip browser download during build
+export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=true
+```
+
+#### CI/CD Integration
+
+The E2E tests are automatically run in GitHub Actions for both Maven and Gradle builds. The CI environment:
+- Installs Playwright browsers automatically
+- Runs tests in headless mode
+- Fails the build if any test fails
+- Provides test reports and logs
+
+**Build Status:**
+- Maven Build: Tests include all E2E tests by default
+- Gradle Build: Tests include all E2E tests by default
+- Separate E2E profiles available for targeted testing
+
 ## Compiling the CSS
 
 There is a `petclinic.css` in `src/main/resources/static/resources/css`. It was generated from the `petclinic.scss` source, combined with the [Bootstrap](https://getbootstrap.com/) library. If you make changes to the `scss`, or upgrade Bootstrap, you will need to re-compile the CSS resources using the Maven profile "css", i.e. `./mvnw package -P css`. There is no build profile for Gradle to compile the CSS.
