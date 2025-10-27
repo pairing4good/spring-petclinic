@@ -141,6 +141,14 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- Playwright for E2E Testing -->
+    <dependency>
+      <groupId>com.microsoft.playwright</groupId>
+      <artifactId>playwright</artifactId>
+      <version>1.49.0</version>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
       <artifactId>jakarta.xml.bind-api</artifactId>
@@ -279,6 +287,37 @@
         <artifactId>cyclonedx-maven-plugin</artifactId>
       </plugin>
 
+      <!-- Playwright for E2E Testing -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!-- Exclude E2E tests from regular test execution unless specifically requested -->
+          <excludes>
+            <exclude>**/*E2ETest.java</exclude>
+            <exclude>**/*E2ETests.java</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>e2e-tests</id>
+            <phase>integration-test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <excludes combine.self="override">
+                <!-- Include E2E tests in integration-test phase -->
+              </excludes>
+              <includes>
+                <include>**/*E2ETest.java</include>
+                <include>**/*E2ETests.java</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
   <licenses>
@@ -373,6 +412,23 @@
                 <phase>generate-resources</phase>
               </execution>
             </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>e2e</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <includes>
+                <include>**/*E2ETest.java</include>
+                <include>**/*E2ETests.java</include>
+              </includes>
+            </configuration>
           </plugin>
         </plugins>
       </build>

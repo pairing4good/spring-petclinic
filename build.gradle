@@ -52,12 +52,30 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-docker-compose'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:mysql'
+  testImplementation 'com.microsoft.playwright:playwright:1.49.0'
   checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
   checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
 }
 
 tasks.named('test') {
   useJUnitPlatform()
+  // Exclude E2E tests from regular test execution
+  exclude '**/*E2ETest*'
+}
+
+//E2E test task
+task e2eTest(type: Test) {
+  useJUnitPlatform()
+  include '**/*E2ETest*'
+  group = 'verification'
+  description = 'Runs end-to-end tests using Playwright'
+}
+
+// Task to print classpath for browser installation
+task printClasspath {
+  doLast {
+    println configurations.testRuntimeClasspath.asPath
+  }
 }
 
 checkstyle {
